@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/herodb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    username: hero
+    password: hero123
+    driver-class-name: com.mysql.cj.jdbc.Driver
