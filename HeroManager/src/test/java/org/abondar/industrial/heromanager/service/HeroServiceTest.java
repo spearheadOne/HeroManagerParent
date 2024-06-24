@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -190,6 +191,49 @@ public class HeroServiceTest {
         assertEquals(1,resp.get(0).associations().size());
         assertEquals(hp1.getPropertyValue(),resp.get(0).associations().get(0));
 
+    }
+
+    @Test
+    public void getAllHeroesNotFoundTest(){
+        var hero = new Hero();
+        hero.setId(1);
+
+        when(heroRepo.findAll(PageRequest.of(0,1)))
+                .thenReturn(new PageImpl<>(List.of()));
+
+
+        assertThrows(HeroNotFoundException.class, () ->  heroService.getAllHeroes(0,1));
+
+    }
+
+    @Test
+    public void getHeroByPropertyTest(){
+        var offset = 0;
+        var limit = 1;
+        var propType = PropertyType.ASSOCIATION;
+        var propValue = "as1";
+        var heroId = 1L;
+        var hero = new Hero();
+        hero.setId(heroId);
+
+        when(heroPropertyRepo
+                .findHeroIdsByPropertyValueAndPropertyType(propValue,propType,PageRequest.of(offset, limit)))
+                .thenReturn(List.of(heroId));
+
+        when(heroRepo.findAllById(List.of(heroId))).thenReturn(List.of(hero));
+
+        var resp = heroService.getHeroByProperty(propValue,propType.name(),offset,limit);
+
+        assertNotNull(resp);
+        assertFalse(resp.isEmpty());
+        assertEquals(1,resp.size());
+        assertEquals(1,resp.get(0).id());
+    }
+
+    @Test
+    public void getHeroByPropertyWrongTest(){
+        assertThrows(IllegalArgumentException.class, () ->
+                heroService.getHeroByProperty("test","test",0,1));
     }
 
     @Test

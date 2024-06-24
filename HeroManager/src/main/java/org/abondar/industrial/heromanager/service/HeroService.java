@@ -19,7 +19,7 @@ public interface HeroService {
 
     List<HeroResponse> getAllHeroes(int offset, int limit);
 
-    List<HeroResponse> getHeroByProperty(String propertyType, String propertyValue);
+    List<HeroResponse> getHeroByProperty(String propertyValue,String propertyType, int offset, int limit);
 
     void deleteHero(long heroId);
 

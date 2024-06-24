@@ -20,4 +20,9 @@ public class HeroExceptionHandler {
         response.sendError(HttpStatus.NOT_FOUND.value(), ex.getMessage());
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public void handleWrongProperty(Exception ex, HttpServletResponse response) throws IOException {
+        response.sendError(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+    }
+
 }

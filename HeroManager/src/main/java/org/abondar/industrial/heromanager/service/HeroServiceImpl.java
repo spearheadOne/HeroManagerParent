@@ -7,6 +7,7 @@ import org.abondar.industrial.heromanager.exception.HeroNotFoundException;
 import org.abondar.industrial.heromanager.mapper.HeroResponseMapper;
 import org.abondar.industrial.heromanager.mapper.HeroPropertyMapper;
 import org.abondar.industrial.heromanager.model.db.Hero;
+import org.abondar.industrial.heromanager.model.db.HeroProperty;
 import org.abondar.industrial.heromanager.model.db.PropertyType;
 import org.abondar.industrial.heromanager.model.request.HeroCreateRequest;
 import org.abondar.industrial.heromanager.model.request.HeroUpdateRequest;
@@ -133,29 +134,17 @@ public class HeroServiceImpl implements HeroService {
     @Override
     public List<HeroResponse> getAllHeroes(int offset, int limit) {
 
-        if (limit == -1){
-            limit = Integer.MAX_VALUE;
-        }
-
         var pageRequest = PageRequest.of(offset, limit);
         var heroPages = heroRepository.findAll(pageRequest);
 
         var heroes = heroPages.getContent();
+        if (heroes.isEmpty()) {
+            throw new HeroNotFoundException();
+        }
 
         heroes.forEach(hero -> log.info("Found hero: {}", hero.getId()));
 
-        var heroIds = heroes.stream()
-                .map(Hero::getId)
-                .toList();
-
-        var properties = propertyRepository.findByHeroIds(heroIds);
-        var propertiesMap = propertyMapper.unmapProperties(properties);
-
-        properties.forEach(p-> log.info("Found properties for hero: {}: {}",p.getPropertyType(), p.getPropertyValue()));
-
-        return heroes.stream().map(
-                        hero -> heroResponseMapper.mapHero(hero, propertiesMap))
-                .collect(Collectors.toList());
+        return mapHeroes(heroes);
     }
 
     @Override
@@ -180,28 +169,36 @@ public class HeroServiceImpl implements HeroService {
     }
 
     @Override
-    public List<HeroResponse> getHeroByProperty(String propertyType, String propertyValue){
-        var heroIds = propertyRepository.findHeroIdsByPropertyValueAndPropertyType(propertyValue,propertyType);
+    public List<HeroResponse> getHeroByProperty(String propertyValue, String propertyType, int offset, int limit){
+        var pageRequest = PageRequest.of(offset, limit);
+
+        var heroIds = propertyRepository
+                .findHeroIdsByPropertyValueAndPropertyType(propertyValue,PropertyType.valueOf(propertyType), pageRequest);
         if (heroIds.isEmpty()){
             throw new HeroNotFoundException();
         }
 
         var heroes = heroRepository.findAllById(heroIds);
 
-        ///TODO move to helper method
-        var properties = propertyRepository.findByHeroIds(heroIds);
-        var propertiesMap = propertyMapper.unmapProperties(properties);
-
-        properties.forEach(p-> log.info("Found properties for hero: {}: {}",p.getPropertyType(), p.getPropertyValue()));
-
-        return heroes.stream().map(
-                        hero -> heroResponseMapper.mapHero(hero, propertiesMap))
-                .collect(Collectors.toList());
+        return mapHeroes(heroes);
     };
 
 
     private Hero checkHero(Long id) {
         return heroRepository.findById(id)
                 .orElseThrow(HeroNotFoundException::new);
+    }
+
+    private List<HeroResponse> mapHeroes(List<Hero> heroes){
+        var heroIds = heroes.stream()
+                .map(Hero::getId)
+                .toList();
+
+        var properties = propertyRepository.findByHeroIds(heroIds);
+        var propertiesMap = propertyMapper.unmapProperties(properties);
+
+        return heroes.stream().map(
+                        hero -> heroResponseMapper.mapHero(hero, propertiesMap))
+                .collect(Collectors.toList());
     }
 }

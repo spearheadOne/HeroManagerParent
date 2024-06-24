@@ -4,7 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.abondar.industrial.heromanager.model.request.HeroCreateRequest;
 import org.abondar.industrial.heromanager.model.request.HeroUpdateRequest;
@@ -87,30 +89,27 @@ public class HeroController {
     @GetMapping(
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<List<HeroResponse>> getAllHeroes(@RequestParam(value = "offset") @Min(0) int offset, @RequestParam(value = "limit") @Min(1) int limit) {
+    public ResponseEntity<List<HeroResponse>> getAllHeroes(@RequestParam(value = "offset") @Min(0) int offset,
+                                                           @RequestParam(value = "limit") @Min(1) @Max(10) int limit) {
         var resp = heroService.getAllHeroes(offset, limit);
-
-        //TODO: throw exception
-        //TODO: limit limit(set 10 as max)
-        if (resp.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
 
         return ResponseEntity.ok(resp);
     }
 
-    //TODO polish with validaitotion and test a flow
-    //TODO add pagination
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Hero found"),
+            @ApiResponse(responseCode = "400", description = "Wrong Property type"),
             @ApiResponse(responseCode = "404", description = "Hero not found"),
     })
     @GetMapping(
             path = EndpointUtil.HERO_PROP_PATH,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<List<HeroResponse>> getHeroByProperty(@PathVariable String type,@PathVariable String value) {
-        var resp = heroService.getHeroByProperty(type, value);
+    public ResponseEntity<List<HeroResponse>> getHeroByProperty(@PathVariable String value,
+                                                                @PathVariable String type,
+                                                                @RequestParam(value = "offset") @Min(0) int offset,
+                                                                @RequestParam(value = "limit") @Min(1) @Max(10) int limit) {
+        var resp = heroService.getHeroByProperty(value,type, offset, limit);
         return ResponseEntity.ok(resp);
     }
 

@@ -1,12 +1,14 @@
 package org.abondar.industrial.heromanager.repo;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageRequest;
+
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class HeroPropertiesRepositoryTest  extends BaseRepositoryTest {
+public class HeroPropertyRepositoryTest extends BaseRepositoryTest {
 
 
     @Test
@@ -65,6 +67,21 @@ public class HeroPropertiesRepositoryTest  extends BaseRepositoryTest {
 
         assertFalse(res.isEmpty());
         assertEquals(property.getId(),res.get(0).getId());
+    }
+
+    @Test
+    public void findHeroIdsByPropertyValueAndPropertyType(){
+        var hero = createHero();
+        var property = createProperty(hero);
+
+        var pageReq = PageRequest.of(0,1);
+        var res = heroPropertyRepository.
+                findHeroIdsByPropertyValueAndPropertyType(property.getPropertyValue(),
+                        property.getPropertyType(),pageReq);
+
+        assertFalse(res.isEmpty());
+        assertEquals(1,res.size());
+        assertEquals(hero.getId(),res.get(0));
     }
 
     @Test

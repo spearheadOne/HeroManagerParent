@@ -9,7 +9,7 @@ public class EndpointUtil {
     public static final String NAME_PATH= "/name/{name}";
     public static final String ALIAS_PATH= "/alias/{alias}";
     public static final String PROPERTY_PATH= "/{prop}";
-    public static final String HERO_PROP_PATH= "/type/{type}/value/{value}";
+    public static final String HERO_PROP_PATH= "/value/{value}/type/{type}";
 
     public static final String DELETE_PROP_PATH= "/prop" + ID_PATH + PROPERTY_PATH;
 

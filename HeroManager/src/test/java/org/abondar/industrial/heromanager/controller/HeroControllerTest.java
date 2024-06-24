@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.abondar.industrial.heromanager.exception.HeroExceptionHandler;
 import org.abondar.industrial.heromanager.exception.HeroNotFoundException;
 import org.abondar.industrial.heromanager.exception.PropertyNotFoundException;
+import org.abondar.industrial.heromanager.model.db.PropertyType;
 import org.abondar.industrial.heromanager.model.request.HeroCreateRequest;
 import org.abondar.industrial.heromanager.model.request.HeroUpdateRequest;
 import org.abondar.industrial.heromanager.model.response.HeroCreateResponse;
@@ -280,6 +281,55 @@ public class HeroControllerTest {
                         .queryParam("limit","1"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void getHeroByPropertyTest() throws Exception{
+        var propertyType = PropertyType.POWER.name();
+        var propertyValue = "test";
+        var offset = 0;
+        var limit = 1;
+
+        when(heroService.getHeroByProperty(propertyValue,propertyType,offset, limit))
+                .thenReturn(List.of(heroResponse));
+
+        mockMvc.perform(get(EndpointUtil.API_V1_ROOT+ "/value/"+propertyValue+"/type/"+propertyType)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .queryParam("offset","0")
+                        .queryParam("limit","1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].id").value(1));
+    }
+
+    @Test
+    public void getHeroByPropertyWrongTest() throws Exception{
+        var propertyType = "test";
+        var propertyValue = "test";
+        var offset = 0;
+        var limit = 1;
+
+        when(heroService.getHeroByProperty(propertyValue,propertyType,offset, limit))
+                .thenThrow(IllegalArgumentException.class);
+
+        mockMvc.perform(get(EndpointUtil.API_V1_ROOT+ "/value/"+propertyValue+"/type/"+propertyType)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .queryParam("offset","0")
+                        .queryParam("limit","1"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void getHeroByPropertyWrongLimitTest() throws Exception{
+
+        mockMvc.perform(get(EndpointUtil.API_V1_ROOT+ "/value/test/type/test")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .queryParam("offset","0")
+                        .queryParam("limit","11"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
     @Test
