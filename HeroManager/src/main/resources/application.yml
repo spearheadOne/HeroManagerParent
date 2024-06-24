@@ -27,6 +27,9 @@ server:
   address: 0.0.0.0
 
 management:
+  endpoint:
+    health:
+      show-details: always
   endpoints:
     web:
       exposure:
