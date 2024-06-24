@@ -129,7 +129,27 @@ public class HeroControllerTest {
     }
 
     @Test
-    public void updateHeroTest() throws Exception {
+    public void updateHeroPartialTest() throws Exception {
+        var request = new HeroUpdateRequest("Hero Alias", "Hero Name", List.of("pwd"), List.of("we"),
+                "Test", List.of("ass1"));
+
+        var json = mapper.writeValueAsString(request);
+        when(heroService.updateHero(1L, request)).thenReturn(heroResponse);
+
+        mockMvc.perform(patch(EndpointUtil.API_V1_ROOT+"/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.name", is("Hero Name")))
+                .andExpect(jsonPath("$.powers.length()").value(1))
+                .andExpect(jsonPath("$.powers[0]").value("pwd"));
+    }
+
+    @Test
+    public void updateHeroFullTest() throws Exception {
         var request = new HeroUpdateRequest("Hero Alias", "Hero Name", List.of("pwd"), List.of("we"),
                 "Test", List.of("ass1"));
 
@@ -149,13 +169,13 @@ public class HeroControllerTest {
     }
 
     @Test
-    public void updateHeroBadRequestTest() throws Exception {
+    public void updateHeroPartialBadRequestTest() throws Exception {
         var request = new HeroUpdateRequest("Hero Alias", "Hero Name", List.of("pwd"), List.of("we"),
                 "Test", List.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "f"));
 
         var json = mapper.writeValueAsString(request);
 
-        mockMvc.perform(put(EndpointUtil.API_V1_ROOT+"/1")
+        mockMvc.perform(patch(EndpointUtil.API_V1_ROOT+"/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andDo(print())
@@ -169,7 +189,7 @@ public class HeroControllerTest {
 
         var json = mapper.writeValueAsString(request);
 
-        mockMvc.perform(put(EndpointUtil.API_V1_ROOT+"/-1")
+        mockMvc.perform(patch(EndpointUtil.API_V1_ROOT+"/-1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andDo(print())
@@ -178,14 +198,14 @@ public class HeroControllerTest {
 
 
     @Test
-    public void updateHeroNotFoundTest() throws Exception {
+    public void updateHeroHeroPartialNotFoundTest() throws Exception {
         var request = new HeroUpdateRequest("Hero Alias", "Hero Name", List.of("pwd"), List.of("we"),
                 "Test", List.of("ass1"));
 
         var json = mapper.writeValueAsString(request);
         when(heroService.updateHero(1L, request)).thenThrow(HeroNotFoundException.class);
 
-        mockMvc.perform(put(EndpointUtil.API_V1_ROOT+"/1")
+        mockMvc.perform(patch(EndpointUtil.API_V1_ROOT+"/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andDo(print())
@@ -273,7 +293,7 @@ public class HeroControllerTest {
 
     @Test
     public void getAllHeroesNotFoundTest() throws Exception {
-        when(heroService.getAllHeroes(0,1)).thenReturn(List.of());
+        when(heroService.getAllHeroes(0,1)).thenThrow(new HeroNotFoundException());
 
         mockMvc.perform(get(EndpointUtil.API_V1_ROOT)
                         .contentType(MediaType.APPLICATION_JSON)

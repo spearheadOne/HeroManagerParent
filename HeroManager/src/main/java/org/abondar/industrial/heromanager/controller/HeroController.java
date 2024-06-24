@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.abondar.industrial.heromanager.model.request.HeroCreateRequest;
 import org.abondar.industrial.heromanager.model.request.HeroUpdateRequest;
@@ -40,11 +39,28 @@ public class HeroController {
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
-    @Operation(description = "Updates hero name,alias, origin and extends hero properties like powers,weapons,associations")
+    @Operation(description = "Fully updates a hero")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Hero updated")
     })
     @PutMapping(
+            path = EndpointUtil.ID_PATH,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<HeroResponse> updateHeroFull(@PathVariable @Min(0) long id, @Valid @RequestBody HeroCreateRequest request) {
+        var updRequest = new HeroUpdateRequest(request.alias(), request.name(), request.powers(),
+                request.weapons(), request.origin(), request.associations());
+        var resp = heroService.updateHero(id, updRequest);
+        return ResponseEntity.ok(resp);
+    }
+
+
+    @Operation(description = "Updates hero name,alias, origin and extends hero properties like powers,weapons,associations")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Hero updated")
+    })
+    @PatchMapping(
             path = EndpointUtil.ID_PATH,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -109,7 +125,7 @@ public class HeroController {
                                                                 @PathVariable String type,
                                                                 @RequestParam(value = "offset") @Min(0) int offset,
                                                                 @RequestParam(value = "limit") @Min(1) @Max(10) int limit) {
-        var resp = heroService.getHeroByProperty(value,type, offset, limit);
+        var resp = heroService.getHeroByProperty(value, type, offset, limit);
         return ResponseEntity.ok(resp);
     }
 
