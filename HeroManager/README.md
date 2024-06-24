@@ -48,10 +48,7 @@ java -jar -Dspring.profiles.active=profileName build/libs/HeroManager-1.0-SNAPSH
 ```
 Note: update dev.env file with your mysql host and credentials
 
-- Docker compose run
-```
-docker-compose up
-```
+
 
 ## Assumptions
 - We limit size of powers,weapons and associations to 10 due to performance concerns
