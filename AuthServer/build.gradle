@@ -29,6 +29,7 @@ dependencies {
     implementation("io.micronaut.data:micronaut-data-jdbc")
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    implementation("org.mindrot:jbcrypt:0.4")
     compileOnly("io.micronaut:micronaut-http-client")
     compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
     runtimeOnly("ch.qos.logback:logback-classic")
