@@ -3,6 +3,7 @@ package org.abondar.authservice.authservice.service
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.abondar.authservice.exception.UserNotFoundException
+import org.abondar.authservice.exception.WrongPasswordException
 import org.abondar.authservice.model.User
 import org.abondar.authservice.service.UserService
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -58,7 +59,7 @@ class UserServiceTest {
         val resp = userService.findUser(user.name)
 
         assertNotNull(resp)
-        assertEquals(user.name,resp.result, )
+        assertEquals(user.name,resp.result)
     }
 
     @Test
@@ -80,6 +81,32 @@ class UserServiceTest {
 
         assertNotNull(resp)
         assertEquals("User deleted successfully", resp.result)
+    }
+
+
+    @Test
+    fun `test login user`() {
+        val user = User(name = "John Doe", passwordHash = "hash")
+        userService.createUser(user)
+
+        val resp = userService.loginUser(user)
+
+        assertNotNull(resp)
+        assertEquals("User logged in successfully", resp.result)
+    }
+
+
+    @Test
+    fun `test login user wrong password`() {
+        val user = User(name = "John Doe", passwordHash = "hash")
+        userService.createUser(user)
+
+        val user2 = user.copy(passwordHash = "hash1")
+
+        assertThrows<WrongPasswordException> {
+            userService.loginUser(user2)
+        }
+
     }
 
 }

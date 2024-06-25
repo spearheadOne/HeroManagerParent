@@ -2,6 +2,7 @@ package org.abondar.authservice.service
 
 import jakarta.inject.Singleton
 import org.abondar.authservice.exception.UserNotFoundException
+import org.abondar.authservice.exception.WrongPasswordException
 import org.abondar.authservice.model.User
 import org.abondar.authservice.model.UserResponse
 import org.abondar.authservice.repo.UserRepository
@@ -20,20 +21,33 @@ class UserService(private val userRepository: UserRepository) {
     }
 
     fun deleteUser(user: User): UserResponse {
-        findUser(user.name)
+        findUserHelper(user.name)
 
         userRepository.delete(user)
         return UserResponse("User deleted successfully")
     }
 
     fun findUser(username: String): UserResponse {
-        val user = userRepository.findByName(username)
-        if (user.isEmpty) {
-            throw UserNotFoundException()
-        }
+        val user = findUserHelper(username)
 
-        return UserResponse(user.get().name)
+        return UserResponse(user.name)
     }
 
+   fun loginUser(user: User): UserResponse {
+       var found = findUserHelper(user.name)
+       if (!found.passwordHash.equals(user.passwordHash)) {
+           throw WrongPasswordException()
+       }
 
+       return UserResponse("User logged in successfully")
+   }
+
+
+  private fun findUserHelper(username: String): User {
+      val user = userRepository.findByName(username)
+      if (user.isEmpty) {
+          throw UserNotFoundException()
+      }
+      return user.get();
+  }
 }
