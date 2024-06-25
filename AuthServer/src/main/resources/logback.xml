@@ -1,5 +1,9 @@
 <configuration>
 
+    <logger name="com.example.micronautmybatisdemo.mapper" level="DEBUG" />
+    <logger name="org.mybatis" level="DEBUG" />
+    <logger name="org.apache.ibatis" level="DEBUG" />
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are assigned the type
              ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
