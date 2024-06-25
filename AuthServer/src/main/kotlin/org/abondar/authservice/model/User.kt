@@ -1,4 +1,4 @@
-package org.abondar.industrial.model
+package org.abondar.authservice.model
 
 import io.micronaut.core.annotation.NonNull
 import io.micronaut.data.annotation.GeneratedValue

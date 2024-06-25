@@ -45,7 +45,7 @@ dependencies {
 
 
 application {
-    mainClass = "org.abondar.industrial.AuthServerApplicationKt"
+    mainClass = "org.abondar.industrial.authservice.AuthServerApplicationKt"
 }
 java {
     sourceCompatibility = JavaVersion.toVersion("17")

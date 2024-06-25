@@ -1,4 +1,4 @@
-package org.abondar.industrial
+package org.abondar.authservice
 
 import io.micronaut.runtime.Micronaut.run
 import io.swagger.v3.oas.annotations.*

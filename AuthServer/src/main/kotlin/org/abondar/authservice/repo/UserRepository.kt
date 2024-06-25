@@ -1,9 +1,9 @@
-package org.abondar.industrial.repo
+package org.abondar.authservice.repo
 
 import io.micronaut.data.jdbc.annotation.JdbcRepository
 import io.micronaut.data.model.query.builder.sql.Dialect
 import io.micronaut.data.repository.CrudRepository
-import org.abondar.industrial.model.User
+import org.abondar.authservice.model.User
 import java.util.*
 
 @JdbcRepository(dialect = Dialect.MYSQL)
