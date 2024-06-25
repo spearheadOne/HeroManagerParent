@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: org.abondar.industrial
+testFramework: junit
+sourceLanguage: kotlin
+buildTool: gradle
+features: [ app-name, flyway, gradle, http-client-test, jdbc-hikari, junit, kapt, kotlin, kotlin-application, logback, micronaut-aot, micronaut-build, micronaut-http-validation, micronaut-test-rest-assured, mockito, mysql, netty-server, openapi, properties, readme, security, security-annotations, security-jwt, serialization-jackson, shade, static-resources, swagger-ui, test-resources ]
