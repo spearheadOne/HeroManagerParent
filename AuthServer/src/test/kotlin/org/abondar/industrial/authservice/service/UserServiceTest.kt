@@ -1,11 +1,11 @@
-package org.abondar.authservice.authservice.service
+package org.abondar.industrial.authservice.service
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import org.abondar.authservice.exception.UserNotFoundException
-import org.abondar.authservice.exception.WrongPasswordException
-import org.abondar.authservice.model.User
-import org.abondar.authservice.service.UserService
+import org.abondar.industrial.authservice.exception.UserNotFoundException
+import org.abondar.industrial.authservice.exception.WrongPasswordException
+import org.abondar.industrial.authservice.model.User
+import org.abondar.industrial.authservice.service.UserService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test

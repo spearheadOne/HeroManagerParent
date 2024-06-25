@@ -1,4 +1,4 @@
-package org.abondar.authservice.service
+package org.abondar.industrial.authservice.service
 
 import jakarta.inject.Singleton
 import org.mindrot.jbcrypt.BCrypt

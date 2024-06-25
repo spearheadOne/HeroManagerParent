@@ -1,11 +1,11 @@
-package org.abondar.authservice.service
+package org.abondar.industrial.authservice.service
 
 import jakarta.inject.Singleton
-import org.abondar.authservice.exception.UserNotFoundException
-import org.abondar.authservice.exception.WrongPasswordException
-import org.abondar.authservice.model.User
-import org.abondar.authservice.model.UserResponse
-import org.abondar.authservice.repo.UserRepository
+import org.abondar.industrial.authservice.exception.UserNotFoundException
+import org.abondar.industrial.authservice.exception.WrongPasswordException
+import org.abondar.industrial.authservice.model.User
+import org.abondar.industrial.authservice.model.UserResponse
+import org.abondar.industrial.authservice.repo.UserRepository
 
 @Singleton
 class UserService(private val userRepository: UserRepository) {

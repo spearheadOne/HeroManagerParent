@@ -1,4 +1,4 @@
-package org.abondar.authservice.model
+package org.abondar.industrial.authservice.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.validation.constraints.NotNull

@@ -1,8 +1,8 @@
-package org.abondar.authservice.authservice.service
+package org.abondar.industrial.authservice.service
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import org.abondar.authservice.service.PasswordService
+import org.abondar.industrial.authservice.service.PasswordService
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.mindrot.jbcrypt.BCrypt
