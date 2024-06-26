@@ -12,4 +12,5 @@ interface UserRepository : CrudRepository<User, Long> {
 
     fun findByName(username: String): Optional<User>
 
+    fun deleteByName(username: String)
 }

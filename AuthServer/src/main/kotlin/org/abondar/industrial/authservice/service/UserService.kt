@@ -20,10 +20,10 @@ class UserService(private val userRepository: UserRepository) {
         return UserResponse("User updated successfully")
     }
 
-    fun deleteUser(user: User): UserResponse {
-        findUserHelper(user.name)
+    fun deleteUser(username: String): UserResponse {
+        findUserHelper(username)
 
-        userRepository.delete(user)
+        userRepository.deleteByName(username)
         return UserResponse("User deleted successfully")
     }
 
@@ -34,8 +34,8 @@ class UserService(private val userRepository: UserRepository) {
     }
 
    fun loginUser(user: User): UserResponse {
-       var found = findUserHelper(user.name)
-       if (!found.passwordHash.equals(user.passwordHash)) {
+       val found = findUserHelper(user.name)
+       if (found.passwordHash != user.passwordHash) {
            throw WrongPasswordException()
        }
 

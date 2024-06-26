@@ -27,5 +27,16 @@ class UserRepositoryTest {
 
     }
 
+    @Test
+    fun `test delete user`() {
+        val user = User(name = "John Doe", passwordHash = "hash")
+        userRepository.save(user)
+
+        userRepository.deleteByName(user.name)
+
+        val res = userRepository.findByName(user.name)
+        assertTrue(res.isEmpty())
+    }
+
 
 }
