@@ -2,7 +2,6 @@ package org.abondar.industrial.authservice.model
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import org.abondar.industrial.authservice.model.User
 import org.abondar.industrial.authservice.repo.UserRepository
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -16,7 +15,7 @@ class UserRepositoryTest {
 
     @Test
     fun `test find user`() {
-        val user = User(name = "John Doe", passwordHash = "hash")
+        val user = User(name = "John Doe", password = "hash")
         userRepository.save(user)
 
         assertNotNull(user.id)
@@ -29,7 +28,7 @@ class UserRepositoryTest {
 
     @Test
     fun `test delete user`() {
-        val user = User(name = "John Doe", passwordHash = "hash")
+        val user = User(name = "John Doe", password = "hash")
         userRepository.save(user)
 
         userRepository.deleteByName(user.name)

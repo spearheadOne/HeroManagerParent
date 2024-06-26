@@ -5,7 +5,6 @@ import jakarta.inject.Inject
 import org.abondar.industrial.authservice.exception.UserNotFoundException
 import org.abondar.industrial.authservice.exception.WrongPasswordException
 import org.abondar.industrial.authservice.model.User
-import org.abondar.industrial.authservice.service.UserService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
@@ -20,7 +19,7 @@ class UserServiceTest {
 
     @Test
     fun `test create user`() {
-        val user = User(name = "John Doe", passwordHash = "hash")
+        val user = User(name = "John Doe", password = "hash")
 
         val resp = userService.createUser(user)
 
@@ -30,10 +29,10 @@ class UserServiceTest {
 
     @Test
     fun `test update user`() {
-        val user = User(name = "John Doe", passwordHash = "hash")
+        val user = User(name = "John Doe", password = "hash")
         userService.createUser(user)
 
-        val upd = user.copy(passwordHash = "hash")
+        val upd = user.copy(password = "hash")
         val resp = userService.updateUser(upd)
 
         assertNotNull(resp)
@@ -42,7 +41,7 @@ class UserServiceTest {
 
     @Test
     fun `test update user not created before`() {
-        val user = User(name = "John Doe", passwordHash = "hash")
+        val user = User(name = "John Doe", password = "hash")
 
         val resp = userService.updateUser(user)
 
@@ -53,7 +52,7 @@ class UserServiceTest {
 
     @Test
     fun `test find user`() {
-        val user = User(name = "John Doe", passwordHash = "hash")
+        val user = User(name = "John Doe", password = "hash")
         userService.createUser(user)
 
         val resp = userService.findUser(user.name)
@@ -74,10 +73,10 @@ class UserServiceTest {
 
     @Test
     fun `test delete user`() {
-        val user = User(name = "John Doe", passwordHash = "hash")
+        val user = User(name = "John Doe", password = "hash")
         userService.createUser(user)
 
-        val resp = userService.deleteUser(user)
+        val resp = userService.deleteUser(user.name)
 
         assertNotNull(resp)
         assertEquals("User deleted successfully", resp.result)
@@ -86,9 +85,10 @@ class UserServiceTest {
 
     @Test
     fun `test login user`() {
-        val user = User(name = "John Doe", passwordHash = "hash")
+        val user = User(name = "John Doe", password = "hash")
         userService.createUser(user)
 
+        user.password = "hash"
         val resp = userService.loginUser(user)
 
         assertNotNull(resp)
@@ -98,10 +98,10 @@ class UserServiceTest {
 
     @Test
     fun `test login user wrong password`() {
-        val user = User(name = "John Doe", passwordHash = "hash")
+        val user = User(name = "John Doe", password = "hash")
         userService.createUser(user)
 
-        val user2 = user.copy(passwordHash = "hash1")
+        val user2 = user.copy(password = "hash1")
 
         assertThrows<WrongPasswordException> {
             userService.loginUser(user2)

@@ -12,4 +12,8 @@ class PasswordService {
 
         return hashedPassword
     }
+
+    fun checkPassword(password: String, hash: String): Boolean {
+        return BCrypt.checkpw(password, hash)
+    }
 }

@@ -8,9 +8,11 @@ import org.abondar.industrial.authservice.model.UserResponse
 import org.abondar.industrial.authservice.repo.UserRepository
 
 @Singleton
-class UserService(private val userRepository: UserRepository) {
+class UserService(private val userRepository: UserRepository,
+                  private val passwordService: PasswordService) {
 
     fun createUser(user: User): UserResponse {
+        user.password = passwordService.hashPassword(user.password)
         userRepository.save(user)
         return UserResponse("User created successfully with id: ${user.id}")
     }
@@ -35,7 +37,8 @@ class UserService(private val userRepository: UserRepository) {
 
    fun loginUser(user: User): UserResponse {
        val found = findUserHelper(user.name)
-       if (found.passwordHash != user.passwordHash) {
+       val isPwRight = passwordService.checkPassword(user.password,found.password)
+       if (!isPwRight) {
            throw WrongPasswordException()
        }
 

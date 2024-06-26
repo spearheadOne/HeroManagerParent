@@ -14,13 +14,38 @@ class PasswordServiceTest {
     lateinit var passwordService: PasswordService
 
     @Test
-    fun `test create user`() {
+    fun `test hash passsword`() {
         val password = "testPwd"
 
         val hash = passwordService.hashPassword(password)
         assertNotNull(hash)
 
-        val passwordIsWrong = BCrypt.checkpw("test", hash)
+        val passwordIsWrong = passwordService.checkPassword("test",hash)
         assertFalse(passwordIsWrong)
+
+        val passwordIsRight = passwordService.checkPassword("test",hash)
+        assertFalse(passwordIsWrong)
+    }
+
+    @Test
+    fun `test hash passsword wrong password`() {
+        val password = "testPwd"
+
+        val hash = passwordService.hashPassword(password)
+        assertNotNull(hash)
+
+        val passwordIsWrong = passwordService.checkPassword("test",hash)
+        assertFalse(passwordIsWrong)
+    }
+
+    @Test
+    fun `test hash passsword right password`() {
+        val password = "testPwd"
+
+        val hash = passwordService.hashPassword(password)
+        assertNotNull(hash)
+
+        val passwordIsRight = passwordService.checkPassword(password, hash)
+        assertTrue(passwordIsRight)
     }
 }

@@ -16,5 +16,5 @@ data class User (
     var name: String,
 
     @NonNull
-    var passwordHash: String,
+    var password: String,
 )
