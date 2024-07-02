@@ -27,6 +27,29 @@ class UserServiceTest {
 
 
     @Test
+    fun `test update user`() {
+        val user = User(name = "John Doe", password = "hash")
+        userService.createUser(user)
+
+        val upd = user.copy(password = "hash")
+        val resp = userService.updateUser(upd)
+
+        assertNotNull(resp)
+        assertEquals("User updated successfully",resp.result)
+    }
+
+    @Test
+    fun `test update user not created before`() {
+        val user = User(name = "John Doe", password = "hash")
+
+        val resp = userService.updateUser(user)
+
+        assertNotNull(resp)
+        assertEquals("User updated successfully",resp.result)
+    }
+
+
+    @Test
     fun `test find user`() {
         val user = User(name = "John Doe", password = "hash")
         userService.createUser(user)

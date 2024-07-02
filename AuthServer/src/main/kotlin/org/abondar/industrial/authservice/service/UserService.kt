@@ -17,6 +17,11 @@ class UserService(private val userRepository: UserRepository,
         return UserResponse("User created successfully with id: ${user.id}")
     }
 
+    fun updateUser(user: User): UserResponse {
+        user.password = passwordService.hashPassword(user.password)
+        userRepository.update(user)
+        return UserResponse("User updated successfully")
+    }
 
     fun deleteUser(username: String): UserResponse {
         findUserHelper(username)
