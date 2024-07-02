@@ -1,11 +1,11 @@
 package org.abondar.industrial.authservice.controller
 
-import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
 import jakarta.inject.Inject
+import org.abondar.industrial.authservice.auth.DecodeUtil.Companion.CREDENTIALS_HEADER
 import org.abondar.industrial.authservice.auth.DecodeUtil.Companion.decodeCredentials
 import org.abondar.industrial.authservice.model.UserResponse
 import org.abondar.industrial.authservice.service.UserService
@@ -19,10 +19,18 @@ class UserController @Inject constructor(
 
     @Post
     @Secured(SecurityRule.IS_ANONYMOUS)
-    fun register(@Header(HttpHeaders.AUTHORIZATION) authHeader: String): HttpResponse<UserResponse> {
+    fun register(@Header(CREDENTIALS_HEADER) authHeader: String): HttpResponse<UserResponse> {
         val user = decodeCredentials(authHeader)
         val resp = userService.createUser(user)
         return HttpResponse.created(resp)
+    }
+
+    @Put
+    @Secured(SecurityRule.IS_AUTHENTICATED)
+    fun update(@Header(CREDENTIALS_HEADER) authHeader: String): HttpResponse<UserResponse> {
+        val user = decodeCredentials(authHeader)
+        val resp = userService.updateUser(user)
+        return HttpResponse.ok(resp)
     }
 
     @Get("/{name}")

@@ -8,13 +8,15 @@ class DecodeUtil {
 
     companion object {
 
+        const val CREDENTIALS_HEADER = "Credentials"
+
         @JvmStatic
-        fun decodeCredentials(authHeader: String): User {
-            if (authHeader.isEmpty()){
+        fun decodeCredentials(credHeader: String): User {
+            if (credHeader.isEmpty()){
                 throw AuthenticationException("Credentials are empty")
             }
-            val base64Credentials = authHeader.removePrefix("Basic: ")
-            val credentialsString = String(Base64.getDecoder().decode(base64Credentials))
+
+            val credentialsString = String(Base64.getDecoder().decode(credHeader))
             val parts = credentialsString.split(":", limit = 2)
 
             return User(null,parts[0],parts[1])

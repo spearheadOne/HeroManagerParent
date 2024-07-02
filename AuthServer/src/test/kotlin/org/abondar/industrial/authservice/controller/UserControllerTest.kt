@@ -2,7 +2,6 @@ package org.abondar.industrial.authservice.controller
 
 import com.nimbusds.jwt.JWTParser
 import com.nimbusds.jwt.SignedJWT
-import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
@@ -12,6 +11,7 @@ import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.security.authentication.UsernamePasswordCredentials
 import io.micronaut.security.token.render.BearerAccessRefreshToken
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import org.abondar.industrial.authservice.auth.DecodeUtil.Companion.CREDENTIALS_HEADER
 import org.abondar.industrial.authservice.model.UserResponse
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -29,7 +29,7 @@ class UserControllerTest (@Client("/") val client: HttpClient){
         val encodedCredentials = Base64.encode(credentials.toByteArray())
 
         val request: HttpRequest<*> = HttpRequest.POST("/v1/user", null)
-            .header(HttpHeaders.AUTHORIZATION, encodedCredentials)
+            .header(CREDENTIALS_HEADER, encodedCredentials)
             .accept("application/json")
 
         val resp : HttpResponse<UserResponse> = client.toBlocking().exchange(request,UserResponse::class.java)
@@ -47,7 +47,7 @@ class UserControllerTest (@Client("/") val client: HttpClient){
         val encodedCredentials = Base64.encode(credentials.toByteArray())
 
         val request: HttpRequest<*> = HttpRequest.POST("/v1/user", null)
-            .header(HttpHeaders.AUTHORIZATION, encodedCredentials)
+            .header(CREDENTIALS_HEADER, encodedCredentials)
             .accept("application/json")
         client.toBlocking().exchange(request,UserResponse::class.java)
 
@@ -70,7 +70,7 @@ class UserControllerTest (@Client("/") val client: HttpClient){
         val encodedCredentials = Base64.encode(credentials.toByteArray())
 
         val request: HttpRequest<*> = HttpRequest.POST("/v1/user", null)
-            .header(HttpHeaders.AUTHORIZATION, encodedCredentials)
+            .header(CREDENTIALS_HEADER, encodedCredentials)
             .accept("application/json")
         client.toBlocking().exchange(request,UserResponse::class.java)
 
@@ -101,7 +101,7 @@ class UserControllerTest (@Client("/") val client: HttpClient){
         val encodedCredentials = Base64.encode(credentials.toByteArray())
 
         val request: HttpRequest<*> = HttpRequest.POST("/v1/user", null)
-            .header(HttpHeaders.AUTHORIZATION, encodedCredentials)
+            .header(CREDENTIALS_HEADER, encodedCredentials)
             .accept("application/json")
         client.toBlocking().exchange(request,UserResponse::class.java)
 
@@ -129,7 +129,7 @@ class UserControllerTest (@Client("/") val client: HttpClient){
         val encodedCredentials = Base64.encode(credentials.toByteArray())
 
         val request: HttpRequest<*> = HttpRequest.POST("/v1/user", null)
-            .header(HttpHeaders.AUTHORIZATION, encodedCredentials)
+            .header(CREDENTIALS_HEADER, encodedCredentials)
             .accept("application/json")
         client.toBlocking().exchange(request,UserResponse::class.java)
 
@@ -160,7 +160,7 @@ class UserControllerTest (@Client("/") val client: HttpClient){
         val encodedCredentials = Base64.encode(credentials.toByteArray())
 
         val request: HttpRequest<*> = HttpRequest.POST("/v1/user", null)
-            .header(HttpHeaders.AUTHORIZATION, encodedCredentials)
+            .header(CREDENTIALS_HEADER, encodedCredentials)
             .accept("application/json")
         client.toBlocking().exchange(request,UserResponse::class.java)
 
