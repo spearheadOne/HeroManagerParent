@@ -45,7 +45,7 @@ class UserControllerTest (@Client("/") val client: HttpClient){
             .accept("application/json")
         client.toBlocking().exchange(request,UserResponse::class.java)
 
-        val loginRequest: HttpRequest<*> = HttpRequest.POST("/login", credentials)
+        val loginRequest: HttpRequest<*> = HttpRequest.POST("/v1/user/login", credentials)
         val loginResponse: HttpResponse<BearerAccessRefreshToken> = client.toBlocking()
             .exchange(loginRequest,BearerAccessRefreshToken::class.java)
         assertEquals(HttpStatus.OK, loginResponse.status)
@@ -66,7 +66,7 @@ class UserControllerTest (@Client("/") val client: HttpClient){
             .accept("application/json")
         client.toBlocking().exchange(request,UserResponse::class.java)
 
-        val loginRequest: HttpRequest<*> = HttpRequest.POST("/login", UsernamePasswordCredentials("test", "testWrong"))
+        val loginRequest: HttpRequest<*> = HttpRequest.POST("/v1/user/login", UsernamePasswordCredentials("test", "testWrong"))
         val ex = assertThrows(HttpClientResponseException::class.java) {
             client.toBlocking()
                 .exchange(loginRequest,BearerAccessRefreshToken::class.java)
@@ -77,7 +77,7 @@ class UserControllerTest (@Client("/") val client: HttpClient){
 
     @Test
     fun `test login user user not found`() {
-        val loginRequest: HttpRequest<*> = HttpRequest.POST("/login", UsernamePasswordCredentials("test", "testWrong"))
+        val loginRequest: HttpRequest<*> = HttpRequest.POST("/v1/user/login", UsernamePasswordCredentials("test", "testWrong"))
         val ex = assertThrows(HttpClientResponseException::class.java) {
             client.toBlocking()
                 .exchange(loginRequest,BearerAccessRefreshToken::class.java)
@@ -95,7 +95,7 @@ class UserControllerTest (@Client("/") val client: HttpClient){
             .accept("application/json")
         val response : HttpResponse<UserResponse> = client.toBlocking().exchange(request,UserResponse::class.java)
 
-        val loginRequest: HttpRequest<*> = HttpRequest.POST("/login", credentials)
+        val loginRequest: HttpRequest<*> = HttpRequest.POST("/v1/user/login", credentials)
         val loginResponse: HttpResponse<BearerAccessRefreshToken> = client.toBlocking()
             .exchange(loginRequest,BearerAccessRefreshToken::class.java)
 
@@ -120,7 +120,7 @@ class UserControllerTest (@Client("/") val client: HttpClient){
         assertEquals(HttpStatus.UNAUTHORIZED, ex.status)
 
 
-        val updateloginRequest: HttpRequest<*> = HttpRequest.POST("/login",
+        val updateloginRequest: HttpRequest<*> = HttpRequest.POST("/v1/user/login",
             UsernamePasswordCredentials("test1", "test1"))
 
         val updLoginResponse: HttpResponse<BearerAccessRefreshToken> = client.toBlocking()
@@ -138,7 +138,7 @@ class UserControllerTest (@Client("/") val client: HttpClient){
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         client.toBlocking().exchange(request,UserResponse::class.java)
 
-        val loginRequest: HttpRequest<*> = HttpRequest.POST("/login", credentials)
+        val loginRequest: HttpRequest<*> = HttpRequest.POST("/v1/user/login", credentials)
         val loginResponse: HttpResponse<BearerAccessRefreshToken> = client.toBlocking()
             .exchange(loginRequest,BearerAccessRefreshToken::class.java)
 
@@ -163,7 +163,7 @@ class UserControllerTest (@Client("/") val client: HttpClient){
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         client.toBlocking().exchange(request,UserResponse::class.java)
 
-        val loginRequest: HttpRequest<*> = HttpRequest.POST("/login", credentials)
+        val loginRequest: HttpRequest<*> = HttpRequest.POST("/v1/user/login", credentials)
         val loginResponse: HttpResponse<BearerAccessRefreshToken> = client.toBlocking()
             .exchange(loginRequest,BearerAccessRefreshToken::class.java)
 
@@ -212,7 +212,7 @@ class UserControllerTest (@Client("/") val client: HttpClient){
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         client.toBlocking().exchange(request,UserResponse::class.java)
 
-        val loginRequest: HttpRequest<*> = HttpRequest.POST("/login", credentials)
+        val loginRequest: HttpRequest<*> = HttpRequest.POST("/v1/user/login", credentials)
         val loginResponse: HttpResponse<BearerAccessRefreshToken> = client.toBlocking()
             .exchange(loginRequest,BearerAccessRefreshToken::class.java)
 
