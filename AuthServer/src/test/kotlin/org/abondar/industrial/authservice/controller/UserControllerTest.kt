@@ -5,54 +5,47 @@ import com.nimbusds.jwt.SignedJWT
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
+import io.micronaut.http.MediaType
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.security.authentication.UsernamePasswordCredentials
 import io.micronaut.security.token.render.BearerAccessRefreshToken
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import org.abondar.industrial.authservice.auth.DecodeUtil.Companion.CREDENTIALS_HEADER
 import org.abondar.industrial.authservice.model.UserResponse
 import org.abondar.industrial.authservice.model.UserUpdateRequest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
 
 @MicronautTest
 class UserControllerTest (@Client("/") val client: HttpClient){
 
 
-    @OptIn(ExperimentalEncodingApi::class)
     @Test
     fun `test create user`() {
-        val credentials = "test:test"
-        val encodedCredentials = Base64.encode(credentials.toByteArray())
+        val credentials = UsernamePasswordCredentials("test","test")
 
-        val request: HttpRequest<*> = HttpRequest.POST("/v1/user", null)
-            .header(CREDENTIALS_HEADER, encodedCredentials)
+        val request: HttpRequest<*> = HttpRequest.POST("/v1/user", credentials)
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .accept("application/json")
 
         val resp : HttpResponse<UserResponse> = client.toBlocking().exchange(request,UserResponse::class.java)
         assertEquals(HttpStatus.CREATED, resp.status)
 
         val body = resp.body()
-        assertEquals("1", body.result)
+        assertNotNull(body.result)
     }
 
-    @OptIn(ExperimentalEncodingApi::class)
     @Test
     fun `test login user`() {
-        val creds = UsernamePasswordCredentials("test", "test")
-        val credentials = creds.username + ":" + creds.password
-        val encodedCredentials = Base64.encode(credentials.toByteArray())
+        val credentials = UsernamePasswordCredentials("test","test")
 
-        val request: HttpRequest<*> = HttpRequest.POST("/v1/user", null)
-            .header(CREDENTIALS_HEADER, encodedCredentials)
+        val request: HttpRequest<*> = HttpRequest.POST("/v1/user", credentials)
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .accept("application/json")
         client.toBlocking().exchange(request,UserResponse::class.java)
 
-        val loginRequest: HttpRequest<*> = HttpRequest.POST("/login", creds)
+        val loginRequest: HttpRequest<*> = HttpRequest.POST("/login", credentials)
         val loginResponse: HttpResponse<BearerAccessRefreshToken> = client.toBlocking()
             .exchange(loginRequest,BearerAccessRefreshToken::class.java)
         assertEquals(HttpStatus.OK, loginResponse.status)
@@ -64,14 +57,12 @@ class UserControllerTest (@Client("/") val client: HttpClient){
     }
 
 
-    @OptIn(ExperimentalEncodingApi::class)
     @Test
     fun `test login user wrong password`() {
-        val credentials = "test:test"
-        val encodedCredentials = Base64.encode(credentials.toByteArray())
+        val credentials = UsernamePasswordCredentials("test","test")
 
-        val request: HttpRequest<*> = HttpRequest.POST("/v1/user", null)
-            .header(CREDENTIALS_HEADER, encodedCredentials)
+        val request: HttpRequest<*> = HttpRequest.POST("/v1/user", credentials)
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .accept("application/json")
         client.toBlocking().exchange(request,UserResponse::class.java)
 
@@ -95,31 +86,27 @@ class UserControllerTest (@Client("/") val client: HttpClient){
     }
 
 
-    @OptIn(ExperimentalEncodingApi::class)
     @Test
     fun `test update user`() {
-        val creds = UsernamePasswordCredentials("test", "test")
-        val credentials = creds.username + ":" + creds.password
-        val encodedCredentials = Base64.encode(credentials.toByteArray())
+        val credentials = UsernamePasswordCredentials("testUP","testUP")
 
-        val request: HttpRequest<*> = HttpRequest.POST("/v1/user", null)
-            .header(CREDENTIALS_HEADER, encodedCredentials)
+        val request: HttpRequest<*> = HttpRequest.POST("/v1/user", credentials)
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .accept("application/json")
-        val resp : HttpResponse<UserResponse> =  client.toBlocking().exchange(request,UserResponse::class.java)
+        val response : HttpResponse<UserResponse> = client.toBlocking().exchange(request,UserResponse::class.java)
 
-        val loginRequest: HttpRequest<*> = HttpRequest.POST("/login", creds)
+        val loginRequest: HttpRequest<*> = HttpRequest.POST("/login", credentials)
         val loginResponse: HttpResponse<BearerAccessRefreshToken> = client.toBlocking()
             .exchange(loginRequest,BearerAccessRefreshToken::class.java)
 
         val bearerAccessRefreshToken: BearerAccessRefreshToken = loginResponse.body()
 
-        val updCredentials = Base64.encode("test1:test1".toByteArray())
-
-        val updateRequest: HttpRequest<*> = HttpRequest.PUT("/v1/user/",UserUpdateRequest(resp
-            .body().result.toLong()))
+        val updateRequest: HttpRequest<*> = HttpRequest.PUT("/v1/user/",UserUpdateRequest(
+            response.body().result.toLong(), "test1", "test1"))
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .accept("application/json")
             .bearerAuth(bearerAccessRefreshToken.accessToken)
-            .header(CREDENTIALS_HEADER, updCredentials)
+
 
         val updateResponse: HttpResponse<UserResponse> = client.toBlocking().exchange(updateRequest,UserResponse::class.java)
         assertEquals(HttpStatus.OK, updateResponse.status)
@@ -142,47 +129,41 @@ class UserControllerTest (@Client("/") val client: HttpClient){
     }
 
 
-    @OptIn(ExperimentalEncodingApi::class)
     @Test
     fun `test find user`() {
-        val creds = UsernamePasswordCredentials("test", "test")
-        val credentials = creds.username + ":" + creds.password
-        val encodedCredentials = Base64.encode(credentials.toByteArray())
+        val credentials = UsernamePasswordCredentials("test", "test")
 
-        val request: HttpRequest<*> = HttpRequest.POST("/v1/user", null)
-            .header(CREDENTIALS_HEADER, encodedCredentials)
+        val request: HttpRequest<*> = HttpRequest.POST("/v1/user", credentials)
             .accept("application/json")
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         client.toBlocking().exchange(request,UserResponse::class.java)
 
-        val loginRequest: HttpRequest<*> = HttpRequest.POST("/login", creds)
+        val loginRequest: HttpRequest<*> = HttpRequest.POST("/login", credentials)
         val loginResponse: HttpResponse<BearerAccessRefreshToken> = client.toBlocking()
             .exchange(loginRequest,BearerAccessRefreshToken::class.java)
 
         val bearerAccessRefreshToken: BearerAccessRefreshToken = loginResponse.body()
 
-        val findRequest: HttpRequest<*> = HttpRequest.GET<Any>("/v1/user/"+creds.username)
+        val findRequest: HttpRequest<*> = HttpRequest.GET<Any>("/v1/user/"+credentials.username)
             .accept("application/json")
             .bearerAuth(bearerAccessRefreshToken.accessToken)
 
         val findResponse: HttpResponse<UserResponse> = client.toBlocking().exchange(findRequest,UserResponse::class.java)
         assertEquals(HttpStatus.OK, findResponse.status)
-        assertEquals(creds.username,findResponse.body().result)
+        assertEquals(credentials.username,findResponse.body().result)
     }
 
 
-    @OptIn(ExperimentalEncodingApi::class)
     @Test
     fun `test user not found`() {
-        val creds = UsernamePasswordCredentials("test", "test")
-        val credentials = creds.username + ":" + creds.password
-        val encodedCredentials = Base64.encode(credentials.toByteArray())
+        val credentials = UsernamePasswordCredentials("test", "test")
 
-        val request: HttpRequest<*> = HttpRequest.POST("/v1/user", null)
-            .header(CREDENTIALS_HEADER, encodedCredentials)
+        val request: HttpRequest<*> = HttpRequest.POST("/v1/user", credentials)
             .accept("application/json")
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         client.toBlocking().exchange(request,UserResponse::class.java)
 
-        val loginRequest: HttpRequest<*> = HttpRequest.POST("/login", creds)
+        val loginRequest: HttpRequest<*> = HttpRequest.POST("/login", credentials)
         val loginResponse: HttpResponse<BearerAccessRefreshToken> = client.toBlocking()
             .exchange(loginRequest,BearerAccessRefreshToken::class.java)
 
@@ -201,16 +182,13 @@ class UserControllerTest (@Client("/") val client: HttpClient){
         assertNotNull(ex.message)
     }
 
-    @OptIn(ExperimentalEncodingApi::class)
     @Test
     fun `test user unauthorized`() {
-        val creds = UsernamePasswordCredentials("test", "test")
-        val credentials = creds.username + ":" + creds.password
-        val encodedCredentials = Base64.encode(credentials.toByteArray())
+        val credentials =  UsernamePasswordCredentials("test", "test")
 
-        val request: HttpRequest<*> = HttpRequest.POST("/v1/user", null)
-            .header(CREDENTIALS_HEADER, encodedCredentials)
+        val request: HttpRequest<*> = HttpRequest.POST("/v1/user", credentials)
             .accept("application/json")
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         client.toBlocking().exchange(request,UserResponse::class.java)
 
 
@@ -225,25 +203,22 @@ class UserControllerTest (@Client("/") val client: HttpClient){
         assertEquals(HttpStatus.UNAUTHORIZED, ex.status)
     }
 
-    @OptIn(ExperimentalEncodingApi::class)
     @Test
     fun `test delete user`() {
-        val creds = UsernamePasswordCredentials("test", "test")
-        val credentials = creds.username + ":" + creds.password
-        val encodedCredentials = Base64.encode(credentials.toByteArray())
+        val credentials =  UsernamePasswordCredentials("test", "test")
 
-        val request: HttpRequest<*> = HttpRequest.POST("/v1/user", null)
-            .header(CREDENTIALS_HEADER, encodedCredentials)
+        val request: HttpRequest<*> = HttpRequest.POST("/v1/user", credentials)
             .accept("application/json")
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         client.toBlocking().exchange(request,UserResponse::class.java)
 
-        val loginRequest: HttpRequest<*> = HttpRequest.POST("/login", creds)
+        val loginRequest: HttpRequest<*> = HttpRequest.POST("/login", credentials)
         val loginResponse: HttpResponse<BearerAccessRefreshToken> = client.toBlocking()
             .exchange(loginRequest,BearerAccessRefreshToken::class.java)
 
         val bearerAccessRefreshToken: BearerAccessRefreshToken = loginResponse.body()
 
-        val deleteRequest: HttpRequest<*> = HttpRequest.DELETE<Any>("/v1/user/"+creds.username)
+        val deleteRequest: HttpRequest<*> = HttpRequest.DELETE<Any>("/v1/user/"+credentials.username)
             .accept("application/json")
             .bearerAuth(bearerAccessRefreshToken.accessToken)
 

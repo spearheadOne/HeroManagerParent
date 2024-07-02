@@ -1,12 +1,13 @@
 package org.abondar.industrial.authservice.controller
 
 import io.micronaut.http.HttpResponse
+import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.security.annotation.Secured
+import io.micronaut.security.authentication.UsernamePasswordCredentials
 import io.micronaut.security.rules.SecurityRule
 import jakarta.inject.Inject
-import org.abondar.industrial.authservice.auth.DecodeUtil.Companion.CREDENTIALS_HEADER
-import org.abondar.industrial.authservice.auth.DecodeUtil.Companion.decodeCredentials
+import org.abondar.industrial.authservice.model.User
 import org.abondar.industrial.authservice.model.UserResponse
 import org.abondar.industrial.authservice.model.UserUpdateRequest
 import org.abondar.industrial.authservice.service.UserService
@@ -19,18 +20,23 @@ class UserController @Inject constructor(
 ) {
 
     @Post
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Secured(SecurityRule.IS_ANONYMOUS)
-    fun register(@Header(CREDENTIALS_HEADER) authHeader: String): HttpResponse<UserResponse> {
-        val user = decodeCredentials(authHeader)
+    fun register(@Body userCreateRequest: UsernamePasswordCredentials): HttpResponse<UserResponse> {
+        val user = User(null,userCreateRequest.username,userCreateRequest.password)
         val resp = userService.createUser(user)
         return HttpResponse.created(resp)
     }
 
     @Put
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Secured(SecurityRule.IS_AUTHENTICATED)
-    fun update(@Header(CREDENTIALS_HEADER) authHeader: String, @Body body: UserUpdateRequest): HttpResponse<UserResponse> {
-        val user = decodeCredentials(authHeader)
-        user.id = body.id
+    fun update(@Body body: UserUpdateRequest): HttpResponse<UserResponse> {
+        val user = User(
+            body.id,
+            body.username,
+            body.password,
+        )
 
         val resp = userService.updateUser(user)
         return HttpResponse.ok(resp)

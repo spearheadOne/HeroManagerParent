@@ -11,4 +11,12 @@ data class UserUpdateRequest (
     @NotNull
     @JsonProperty(required = true)
     val id: Long,
+
+    @NotNull
+    @JsonProperty(required = true)
+    val username: String,
+
+    @NotNull
+    @JsonProperty(required = true)
+    val password: String,
 )
