@@ -13,6 +13,7 @@ import io.micronaut.security.token.render.BearerAccessRefreshToken
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.abondar.industrial.authservice.auth.DecodeUtil.Companion.CREDENTIALS_HEADER
 import org.abondar.industrial.authservice.model.UserResponse
+import org.abondar.industrial.authservice.model.UserUpdateRequest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import kotlin.io.encoding.Base64
@@ -36,7 +37,7 @@ class UserControllerTest (@Client("/") val client: HttpClient){
         assertEquals(HttpStatus.CREATED, resp.status)
 
         val body = resp.body()
-        assertTrue(body.result.contains("User created successfully with id"))
+        assertEquals("1", body.result)
     }
 
     @OptIn(ExperimentalEncodingApi::class)
@@ -92,6 +93,54 @@ class UserControllerTest (@Client("/") val client: HttpClient){
         }
         assertEquals(HttpStatus.UNAUTHORIZED, ex.status)
     }
+
+
+    @OptIn(ExperimentalEncodingApi::class)
+    @Test
+    fun `test update user`() {
+        val creds = UsernamePasswordCredentials("test", "test")
+        val credentials = creds.username + ":" + creds.password
+        val encodedCredentials = Base64.encode(credentials.toByteArray())
+
+        val request: HttpRequest<*> = HttpRequest.POST("/v1/user", null)
+            .header(CREDENTIALS_HEADER, encodedCredentials)
+            .accept("application/json")
+        val resp : HttpResponse<UserResponse> =  client.toBlocking().exchange(request,UserResponse::class.java)
+
+        val loginRequest: HttpRequest<*> = HttpRequest.POST("/login", creds)
+        val loginResponse: HttpResponse<BearerAccessRefreshToken> = client.toBlocking()
+            .exchange(loginRequest,BearerAccessRefreshToken::class.java)
+
+        val bearerAccessRefreshToken: BearerAccessRefreshToken = loginResponse.body()
+
+        val updCredentials = Base64.encode("test1:test1".toByteArray())
+
+        val updateRequest: HttpRequest<*> = HttpRequest.PUT("/v1/user/",UserUpdateRequest(resp
+            .body().result.toLong()))
+            .accept("application/json")
+            .bearerAuth(bearerAccessRefreshToken.accessToken)
+            .header(CREDENTIALS_HEADER, updCredentials)
+
+        val updateResponse: HttpResponse<UserResponse> = client.toBlocking().exchange(updateRequest,UserResponse::class.java)
+        assertEquals(HttpStatus.OK, updateResponse.status)
+        assertEquals("User updated successfully",updateResponse.body().result)
+
+
+        val ex = assertThrows(HttpClientResponseException::class.java) {
+            client.toBlocking()
+                .exchange(loginRequest,BearerAccessRefreshToken::class.java)
+        }
+        assertEquals(HttpStatus.UNAUTHORIZED, ex.status)
+
+
+        val updateloginRequest: HttpRequest<*> = HttpRequest.POST("/login",
+            UsernamePasswordCredentials("test1", "test1"))
+
+        val updLoginResponse: HttpResponse<BearerAccessRefreshToken> = client.toBlocking()
+            .exchange(updateloginRequest,BearerAccessRefreshToken::class.java)
+        assertEquals(HttpStatus.OK, updLoginResponse.status)
+    }
+
 
     @OptIn(ExperimentalEncodingApi::class)
     @Test

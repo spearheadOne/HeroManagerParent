@@ -8,6 +8,7 @@ import jakarta.inject.Inject
 import org.abondar.industrial.authservice.auth.DecodeUtil.Companion.CREDENTIALS_HEADER
 import org.abondar.industrial.authservice.auth.DecodeUtil.Companion.decodeCredentials
 import org.abondar.industrial.authservice.model.UserResponse
+import org.abondar.industrial.authservice.model.UserUpdateRequest
 import org.abondar.industrial.authservice.service.UserService
 
 
@@ -27,8 +28,10 @@ class UserController @Inject constructor(
 
     @Put
     @Secured(SecurityRule.IS_AUTHENTICATED)
-    fun update(@Header(CREDENTIALS_HEADER) authHeader: String): HttpResponse<UserResponse> {
+    fun update(@Header(CREDENTIALS_HEADER) authHeader: String, @Body body: UserUpdateRequest): HttpResponse<UserResponse> {
         val user = decodeCredentials(authHeader)
+        user.id = body.id
+
         val resp = userService.updateUser(user)
         return HttpResponse.ok(resp)
     }
