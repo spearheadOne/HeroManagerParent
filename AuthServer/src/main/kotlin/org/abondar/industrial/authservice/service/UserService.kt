@@ -14,12 +14,20 @@ class UserService(private val userRepository: UserRepository,
     fun createUser(user: User): UserResponse {
         user.password = passwordService.hashPassword(user.password)
         userRepository.save(user)
-        return UserResponse("User created successfully with id: ${user.id}")
+        return UserResponse(user.id.toString())
     }
 
     fun updateUser(user: User): UserResponse {
-        user.password = passwordService.hashPassword(user.password)
-        userRepository.update(user)
+        val res = userRepository.findById(user.id)
+        if (res.isEmpty) {
+            throw UserNotFoundException()
+        }
+
+        val usr = res.get()
+        usr.name= user.name
+        usr.password = passwordService.hashPassword(user.password)
+
+        userRepository.update(usr)
         return UserResponse("User updated successfully")
     }
 

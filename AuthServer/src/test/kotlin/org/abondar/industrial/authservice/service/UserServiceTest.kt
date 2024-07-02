@@ -39,13 +39,13 @@ class UserServiceTest {
     }
 
     @Test
-    fun `test update user not created before`() {
-        val user = User(name = "John Doe", password = "hash")
+    fun `test update user not found`() {
+        val user = User(id=100, name = "John Doe", password = "hash")
 
-        val resp = userService.updateUser(user)
+        assertThrows<UserNotFoundException> {
+            userService.updateUser(user)
+        }
 
-        assertNotNull(resp)
-        assertEquals("User updated successfully",resp.result)
     }
 
 
