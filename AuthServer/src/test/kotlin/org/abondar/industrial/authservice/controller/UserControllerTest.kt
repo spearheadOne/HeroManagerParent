@@ -203,6 +203,30 @@ class UserControllerTest (@Client("/") val client: HttpClient){
 
     @OptIn(ExperimentalEncodingApi::class)
     @Test
+    fun `test user unauthorized`() {
+        val creds = UsernamePasswordCredentials("test", "test")
+        val credentials = creds.username + ":" + creds.password
+        val encodedCredentials = Base64.encode(credentials.toByteArray())
+
+        val request: HttpRequest<*> = HttpRequest.POST("/v1/user", null)
+            .header(CREDENTIALS_HEADER, encodedCredentials)
+            .accept("application/json")
+        client.toBlocking().exchange(request,UserResponse::class.java)
+
+
+        val findRequest: HttpRequest<*> = HttpRequest.GET<Any>("/v1/user/user123")
+            .accept("application/json")
+
+
+        val ex = assertThrows(HttpClientResponseException::class.java) {
+            client.toBlocking().exchange(findRequest,UserResponse::class.java)
+        }
+
+        assertEquals(HttpStatus.UNAUTHORIZED, ex.status)
+    }
+
+    @OptIn(ExperimentalEncodingApi::class)
+    @Test
     fun `test delete user`() {
         val creds = UsernamePasswordCredentials("test", "test")
         val credentials = creds.username + ":" + creds.password

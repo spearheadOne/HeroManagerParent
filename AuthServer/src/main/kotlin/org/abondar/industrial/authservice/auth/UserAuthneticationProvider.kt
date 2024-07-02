@@ -5,7 +5,6 @@ import io.micronaut.security.authentication.*
 import io.micronaut.security.authentication.provider.HttpRequestAuthenticationProvider
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import org.abondar.industrial.authservice.auth.DecodeUtil.Companion.decodeCredentials
 import org.abondar.industrial.authservice.repo.UserRepository
 import org.abondar.industrial.authservice.service.PasswordService
 
