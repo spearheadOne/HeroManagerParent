@@ -1,8 +1,8 @@
 package org.abondar.industrial.authservice.service
 
+import io.micronaut.security.authentication.AuthenticationException
 import jakarta.inject.Singleton
 import org.abondar.industrial.authservice.exception.UserNotFoundException
-import org.abondar.industrial.authservice.exception.WrongPasswordException
 import org.abondar.industrial.authservice.model.User
 import org.abondar.industrial.authservice.model.UserResponse
 import org.abondar.industrial.authservice.repo.UserRepository
@@ -17,10 +17,6 @@ class UserService(private val userRepository: UserRepository,
         return UserResponse("User created successfully with id: ${user.id}")
     }
 
-    fun updateUser(user: User): UserResponse {
-        userRepository.update(user)
-        return UserResponse("User updated successfully")
-    }
 
     fun deleteUser(username: String): UserResponse {
         findUserHelper(username)
@@ -35,15 +31,7 @@ class UserService(private val userRepository: UserRepository,
         return UserResponse(user.name)
     }
 
-   fun loginUser(user: User): UserResponse {
-       val found = findUserHelper(user.name)
-       val isPwRight = passwordService.checkPassword(user.password,found.password)
-       if (!isPwRight) {
-           throw WrongPasswordException()
-       }
 
-       return UserResponse("User logged in successfully")
-   }
 
 
   private fun findUserHelper(username: String): User {
