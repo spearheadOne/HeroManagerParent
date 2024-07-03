@@ -8,7 +8,9 @@ import io.micronaut.security.token.refresh.RefreshTokenPersistence
 import jakarta.inject.Singleton
 import org.abondar.industrial.authservice.model.RefreshToken
 import org.abondar.industrial.authservice.repo.RefreshTokenRepository
+import org.abondar.industrial.authservice.service.UserService
 import org.reactivestreams.Publisher
+import org.slf4j.LoggerFactory
 import reactor.core.publisher.Flux
 import java.time.Instant
 import java.util.*
@@ -18,9 +20,11 @@ class AuthServiceRefreshTokenPersistence(
     private val refreshTokenRepository: RefreshTokenRepository
 ) : RefreshTokenPersistence {
 
+    private val log = LoggerFactory.getLogger(AuthServiceRefreshTokenPersistence::class.java)
 
     override fun persistToken(event: RefreshTokenGeneratedEvent?) {
         if (event?.refreshToken != null && event.authentication?.name != null) {
+            log.info("Saving refresh token")
             refreshTokenRepository.save(event.authentication.name,event.refreshToken,false, Instant.now())
         }
     }
@@ -29,10 +33,11 @@ class AuthServiceRefreshTokenPersistence(
         return Flux.create { emitter ->
 
             val nonNullableRefreshToken = refreshToken ?: run {
+                log.info("Refresh token is null")
                 emitter.error(
                     OauthErrorResponseException(
                         IssuingAnAccessTokenErrorCode.INVALID_GRANT,
-                        "refresh token is null",
+                        "Refresh token is null",
                         null
                     )
                 )
@@ -43,10 +48,11 @@ class AuthServiceRefreshTokenPersistence(
             if (tokenOpt.isPresent) {
                 val token = tokenOpt.get()
                 if (token.isRevoked) {
+                    log.info("Refresh token revoked")
                     emitter.error(
                         OauthErrorResponseException(
                             IssuingAnAccessTokenErrorCode.INVALID_GRANT,
-                            "refresh token revoked",
+                            "Refresh token revoked",
                             null
                         )
                     )
@@ -55,10 +61,11 @@ class AuthServiceRefreshTokenPersistence(
                     emitter.complete()
                 }
             } else {
+                log.info("Refresh token not found")
                 emitter.error(
                     OauthErrorResponseException(
                         IssuingAnAccessTokenErrorCode.INVALID_GRANT,
-                        "refresh token not found",
+                        "Refresh token not found",
                         null
                     )
                 )
