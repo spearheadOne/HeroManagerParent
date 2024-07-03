@@ -3,8 +3,7 @@ CREATE TABLE refresh_token
     id           BIGINT AUTO_INCREMENT PRIMARY KEY,
     token        VARCHAR(512) NOT NULL,
     is_revoked   BOOLEAN,
-  #  username     VARCHAR(255) NOT NULL,
     date_created DATETIME,
     user_id    BIGINT         NOT NULL,
-    CONSTRAINT fk_token_user_id FOREIGN KEY (user_id) REFERENCES user(id)
+    CONSTRAINT fk_token_user_id FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 );

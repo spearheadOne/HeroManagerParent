@@ -64,7 +64,7 @@ class UserServiceTest {
     fun `test find user not found`() {
 
         assertThrows<UserNotFoundException> {
-            userService.findUser("test")
+            userService.findUser("xxx")
         }
 
     }
