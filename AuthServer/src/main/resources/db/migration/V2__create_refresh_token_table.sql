@@ -5,5 +5,5 @@ CREATE TABLE refresh_token
     is_revoked   BOOLEAN,
     date_created DATETIME,
     user_id    BIGINT         NOT NULL,
-    CONSTRAINT fk_token_user_id FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+    CONSTRAINT fk_token_user_id FOREIGN KEY (user_id) REFERENCES auth_user(id) ON DELETE CASCADE
 );

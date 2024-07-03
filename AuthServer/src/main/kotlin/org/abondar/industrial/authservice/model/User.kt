@@ -6,8 +6,9 @@ import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.Relation
 import io.micronaut.data.annotation.Relation.Cascade
+import io.micronaut.data.model.naming.NamingStrategies
 
-@MappedEntity
+@MappedEntity(value = "auth_user", namingStrategy = NamingStrategies.UnderScoreSeparatedUpperCase::class)
 data class User (
 
     @field:Id
