@@ -2,6 +2,7 @@ package org.abondar.industrial.authservice.model
 
 import io.micronaut.core.annotation.NonNull
 import io.micronaut.data.annotation.*
+import io.micronaut.data.annotation.sql.JoinColumn
 import io.micronaut.data.model.naming.NamingStrategies
 import jakarta.validation.constraints.NotBlank
 import java.time.Instant
@@ -18,10 +19,6 @@ data class RefreshToken (
     var token: String,
 
     @NonNull
-    @NotBlank
-    var username: String,
-
-    @NonNull
     @field:MappedProperty("is_revoked")
     var isRevoked: Boolean,
 
@@ -29,4 +26,9 @@ data class RefreshToken (
     @NonNull
     var dateCreated: Instant,
 
+    @NonNull
+    @field:MappedProperty("user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @field:Relation(value = Relation.Kind.MANY_TO_ONE)
+    var user: User?
     )

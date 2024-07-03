@@ -8,6 +8,7 @@ import io.micronaut.security.token.refresh.RefreshTokenPersistence
 import jakarta.inject.Singleton
 import org.abondar.industrial.authservice.model.RefreshToken
 import org.abondar.industrial.authservice.repo.RefreshTokenRepository
+import org.abondar.industrial.authservice.repo.UserRepository
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Flux
@@ -16,6 +17,7 @@ import java.util.*
 
 @Singleton
 class AuthServiceRefreshTokenPersistence(
+    private val userRepository: UserRepository,
     private val refreshTokenRepository: RefreshTokenRepository
 ) : RefreshTokenPersistence {
 
@@ -24,7 +26,15 @@ class AuthServiceRefreshTokenPersistence(
     override fun persistToken(event: RefreshTokenGeneratedEvent?) {
         if (event?.refreshToken != null && event.authentication?.name != null) {
             log.info("Saving refresh token")
-            refreshTokenRepository.save(event.authentication.name,event.refreshToken,false, Instant.now())
+            val user = userRepository.findByName(event.authentication.name)
+            if (user.isEmpty){
+               throw OauthErrorResponseException(
+                    IssuingAnAccessTokenErrorCode.INVALID_GRANT,
+                    "User not found",
+                    null
+                )
+            }
+            refreshTokenRepository.save(user.get(),event.refreshToken,false, Instant.now())
         }
     }
 
@@ -56,7 +66,7 @@ class AuthServiceRefreshTokenPersistence(
                         )
                     )
                 } else {
-                    emitter.next(Authentication.build(token.username))
+                    emitter.next(Authentication.build(token.user?.name))
                     emitter.complete()
                 }
             } else {
