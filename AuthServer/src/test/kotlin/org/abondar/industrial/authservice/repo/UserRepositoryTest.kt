@@ -1,8 +1,8 @@
-package org.abondar.industrial.authservice.model
+package org.abondar.industrial.authservice.repo
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import org.abondar.industrial.authservice.repo.UserRepository
+import org.abondar.industrial.authservice.model.User
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
