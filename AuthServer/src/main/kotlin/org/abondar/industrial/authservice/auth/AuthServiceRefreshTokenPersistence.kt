@@ -8,7 +8,6 @@ import io.micronaut.security.token.refresh.RefreshTokenPersistence
 import jakarta.inject.Singleton
 import org.abondar.industrial.authservice.model.RefreshToken
 import org.abondar.industrial.authservice.repo.RefreshTokenRepository
-import org.abondar.industrial.authservice.service.UserService
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Flux
