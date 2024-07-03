@@ -6,8 +6,10 @@ import io.swagger.v3.oas.annotations.info.*
 
 @OpenAPIDefinition(
     info = Info(
-        title = "authserver",
-        version = "0.0"
+        title = "Authentication Server",
+        description = "Authentication Server API for usage in microservices",
+        version = "1.0",
+        license = License(name="MIT")
     )
 )
 object Api {
