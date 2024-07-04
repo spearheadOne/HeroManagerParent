@@ -1,72 +1,44 @@
-## Micronaut 4.5.0 Documentation
+## Authentication Service
 
-- [User Guide](https://docs.micronaut.io/4.5.0/guide/index.html)
-- [API Reference](https://docs.micronaut.io/4.5.0/api/index.html)
-- [Configuration Reference](https://docs.micronaut.io/4.5.0/guide/configurationreference.html)
-- [Micronaut Guides](https://guides.micronaut.io/index.html)
+Tiny demo service for authenticating multiple microservices
 
----
+## Build and run
 
-- [Micronaut Gradle Plugin documentation](https://micronaut-projects.github.io/micronaut-gradle-plugin/latest/)
-- [GraalVM Gradle Plugin documentation](https://graalvm.github.io/native-build-tools/latest/gradle-plugin.html)
-- [Shadow Gradle Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow)
+The app can be built in three variants: regular kotlin app, native runtime image and docker image (based on regular and native run time)
 
-## Feature micronaut-aot documentation
+- Java build and run
+```
+./gradlew clean build
 
-- [Micronaut AOT documentation](https://micronaut-projects.github.io/micronaut-aot/latest/guide/)
+./gradlew run
+```
 
-## Feature security documentation
+- Native build and run
+```
+./gradlew nativeCompile
 
-- [Micronaut Security documentation](https://micronaut-projects.github.io/micronaut-security/latest/guide/index.html)
+./gradlew nativeRun
+```
 
-## Feature test-resources documentation
+- Docker build
+```
+./gradlew dockerBuild 
+```
 
-- [Micronaut Test Resources documentation](https://micronaut-projects.github.io/micronaut-test-resources/latest/guide/)
+- Docker build native
+```
+./gradlew dockerBuildNative
+```
 
-## Feature flyway documentation
+- Docker jib build
+```
+./gradlew jib
+```
+Set image name and docker registry credentials in gradle.properties. Make sure that build arch matches docker base image arch
 
-- [Micronaut Flyway Database Migration documentation](https://micronaut-projects.github.io/micronaut-flyway/latest/guide/index.html)
+- Run a docker image
 
-- [https://flywaydb.org/](https://flywaydb.org/)
-
-## Feature openapi documentation
-
-- [Micronaut OpenAPI Support documentation](https://micronaut-projects.github.io/micronaut-openapi/latest/guide/index.html)
-
-- [https://www.openapis.org](https://www.openapis.org)
-
-## Feature micronaut-test-rest-assured documentation
-
-- [Micronaut Micronaut-Test REST-assured documentation](https://micronaut-projects.github.io/micronaut-test/latest/guide/#restAssured)
-
-- [https://rest-assured.io/#docs](https://rest-assured.io/#docs)
-
-## Feature mockito documentation
-
-- [https://site.mockito.org](https://site.mockito.org)
-
-## Feature swagger-ui documentation
-
-- [Micronaut Swagger UI documentation](https://micronaut-projects.github.io/micronaut-openapi/latest/guide/index.html)
-
-- [https://swagger.io/tools/swagger-ui/](https://swagger.io/tools/swagger-ui/)
-
-## Feature security-jwt documentation
-
-- [Micronaut Security JWT documentation](https://micronaut-projects.github.io/micronaut-security/latest/guide/index.html)
-
-## Feature serialization-jackson documentation
-
-- [Micronaut Serialization Jackson Core documentation](https://micronaut-projects.github.io/micronaut-serialization/latest/guide/)
-
-## Feature kapt documentation
-
-- [Micronaut Kotlin Annotation Processing (KAPT) documentation](https://docs.micronaut.io/snapshot/guide/#kapt)
-
-- [https://kotlinlang.org/docs/kapt.html](https://kotlinlang.org/docs/kapt.html)
-
-## Feature jdbc-hikari documentation
-
-- [Micronaut Hikari JDBC Connection Pool documentation](https://micronaut-projects.github.io/micronaut-sql/latest/guide/index.html#jdbc)
-
-
+```
+`docker run --env-file ./dev.env -d --name todo  -p 8080:8080 abondar/authserver:1.0
+```
+Note: update dev.env file with your mysql host and credentials
