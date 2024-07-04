@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: heromanager
+  namespace: herospace
+spec:
+  replicas: 1  # Adjust the number of replicas as needed
+  selector:
+    matchLabels:
+      app: heromanager
+  template:
+    metadata:
+      labels:
+        app: heromanager
+    spec:
+      containers:
+      - name: heromanager
+        image: abondar/heromanager:1.0-SNAPSHOT
+        envFrom:
+           - configMapRef:
+              name: heromanager-config
+           - secretRef:
+               name: heromanager-secret    
+        ports:
+        - containerPort: 8080

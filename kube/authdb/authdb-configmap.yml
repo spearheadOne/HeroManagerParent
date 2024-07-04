@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: authdb-config
+  namespace: herospace
+data:
+    MYSQL_DATABASE: authdb
+   
+   

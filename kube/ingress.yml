@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: heroingress
+  namespace: herospace
+  labels:
+    name: heroingress
+spec:
+  rules:
+  - host: localhost
+    http: 
+      paths:
+      - pathType: Prefix
+        path: /heromanager
+        backend:
+          service:
+            name: heromanager
+            port: 
+              number: 8080     
+      - pathType: Prefix
+        path: /authserver
+        backend:
+          service:
+            name: authserver
+            port: 
+              number: 8081      

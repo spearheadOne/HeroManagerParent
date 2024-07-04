@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authserver
+  namespace: herospace
+spec:
+  replicas: 1  # Adjust the number of replicas as needed
+  selector:
+    matchLabels:
+      app: authserver
+  template:
+    metadata:
+      labels:
+        app: authserver
+    spec:
+      containers:
+      - name: authserver
+        image: abondar/authserver:1.0
+        envFrom:
+          - configMapRef:
+              name: authserver-config
+          - secretRef:
+               name: authserver-secret    
+        ports:
+          - containerPort: 8080  
+            hostPort: 8081      
