@@ -12,3 +12,8 @@ management:
  endpoint:
    env:
      show-values: always
+
+
+redis:
+  hostname: ${REDIS_HOST}
+  password: ${REDIS_PASSWORD}

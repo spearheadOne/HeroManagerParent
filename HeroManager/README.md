@@ -55,3 +55,12 @@ Note: update dev.env file with your mysql host and credentials
 - Update for properties means adding of new properties. If property needs to be changed it should be deleted and new value should be added.
 - Authentication and authorization were not added due to not clear requirements and assumption that there is a separate service responsible for it. 
 This microservice can send incoming jwt token in authorization service
+
+/login output
+{
+"access_token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwibmJmIjoxNzIwMTI2MzE3LCJyb2xlcyI6W10sImlzcyI6ImF1dGhzZXJ2ZXIiLCJleHAiOjE3MjAxMjY5MTcsImlhdCI6MTcyMDEyNjMxN30.22nAgRmzn2ItG-pWY7HyKe1onEWmU6V6Jn9GOaUc26U",
+"refresh_token": "eyJhbGciOiJIUzI1NiJ9.YzkzMzlkY2YtMjIyZS00NjBmLTk3NTMtZTAzZDQwYjEyMDU5.07Vkkk7zH9LaHIFvVHb2R2XUndTmP2197b0RSzWxaf8",
+"token_type": "Bearer",
+"expires_in": 600,
+"username": "test"
+}
