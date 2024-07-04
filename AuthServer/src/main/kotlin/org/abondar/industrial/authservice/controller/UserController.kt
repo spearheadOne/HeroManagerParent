@@ -17,7 +17,7 @@ import org.abondar.industrial.authservice.service.UserService
 
 
 @Controller("/v1/user")
-@Tag(name = "Authentication", description = "Operations related to user management")
+@Tag(name = "User Management", description = "Operations related to user management")
 class UserController @Inject constructor(
     private val userService: UserService,
 

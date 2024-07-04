@@ -8,9 +8,11 @@ import io.micronaut.security.rules.SecurityRule
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
 
 
 @Controller("/v1/auth")
+@Tag(name = "JWT Authentication", description = "Operations related to microservice authentication")
 class AuthController {
 
 

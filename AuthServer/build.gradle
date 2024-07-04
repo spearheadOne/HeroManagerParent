@@ -25,6 +25,7 @@ repositories {
 dependencies {
     kapt("io.micronaut:micronaut-http-validation")
     kapt("io.micronaut.openapi:micronaut-openapi")
+    kapt("io.micronaut:micronaut-management")
     kapt("io.micronaut.security:micronaut-security-annotations")
     kapt("io.micronaut.serde:micronaut-serde-processor")
     implementation("io.micronaut.flyway:micronaut-flyway")
