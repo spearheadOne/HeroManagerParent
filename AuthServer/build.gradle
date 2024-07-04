@@ -73,16 +73,10 @@ kotlin {
 tasks {
        dockerfileNative {
            args("-Dmicronaut.environments=docker")
-           instruction ("ARG DB_AUTH_HOST")
-           instruction ("ARG DB_AUTH_USER")
-           instruction ("ARG DB_AUTH_PASSWORD")
        }
 
        dockerfile {
            args("-Dmicronaut.environments=docker")
-           instruction ("ARG DB_AUTH_HOST")
-           instruction ("ARG DB_AUTH_USER")
-           instruction ("ARG DB_AUTH_PASSWORD")
        }
 
        dockerBuildNative {
