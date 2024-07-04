@@ -1,3 +1,11 @@
+import io.micronaut.gradle.docker.NativeImageDockerfile
+
+buildscript {
+    dependencies {
+        classpath('com.google.cloud.tools:jib-native-image-extension-gradle:0.1.0')
+    }
+}
+
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.9.23"
     id("org.jetbrains.kotlin.kapt") version "1.9.23"
@@ -6,9 +14,10 @@ plugins {
     id("io.micronaut.application") version "4.4.0"
     id("io.micronaut.test-resources") version "4.4.0"
     id("io.micronaut.aot") version "4.4.0"
+    id("com.google.cloud.tools.jib") version "3.3.1"
 }
 
-version = "0.1"
+version = "1.0"
 group = "org.abondar.industrial"
 
 repositories {
@@ -59,6 +68,68 @@ kotlin {
     jvmToolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
+}
+
+tasks {
+       dockerfileNative {
+           args("-Dmicronaut.environments=docker")
+           instruction ("ARG DB_AUTH_HOST")
+           instruction ("ARG DB_AUTH_USER")
+           instruction ("ARG DB_AUTH_PASSWORD")
+       }
+
+       dockerfile {
+           args("-Dmicronaut.environments=docker")
+           instruction ("ARG DB_AUTH_HOST")
+           instruction ("ARG DB_AUTH_USER")
+           instruction ("ARG DB_AUTH_PASSWORD")
+       }
+
+       dockerBuildNative {
+           images.add("$imageName:$project.version")
+       }
+
+       dockerBuild {
+           images.add("$imageName:$project.version")
+       }
+
+       jib {
+            from {
+                image = "ghcr.io/graalvm/native-image-community:21.0.2-ol9"
+
+                platforms {
+                    platform {
+                        architecture = "$imageArch"
+                        os = "linux"
+                    }
+                }
+            }
+
+            to {
+                image = "$imageName:$project.version"
+
+                auth {
+                    username = "$dockerhubUser"
+                    password = "$dockerhubPass"
+                }
+            }
+
+
+            pluginExtensions {
+                pluginExtension {
+                    implementation = "com.google.cloud.tools.jib.gradle.extension.nativeimage.JibNativeImageExtension"
+                    properties = [
+                            imageName: "authserver"
+                    ]
+                }
+            }
+
+            container {
+                environment = ["MICRONAUT_ENVIRONMENTS":"docker"]
+                ports = ["8080"]
+            }
+        }
+
 }
 
 graalvmNative.toolchainDetection = false
