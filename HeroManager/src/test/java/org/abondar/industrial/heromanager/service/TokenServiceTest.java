@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 public class TokenServiceTest {
 
     @InjectMocks
-    private TokenServiceImpl tokenService;
+    private TokenService tokenService;
 
     @Mock
     private RedisTemplate<String, Object> redisTemplate;

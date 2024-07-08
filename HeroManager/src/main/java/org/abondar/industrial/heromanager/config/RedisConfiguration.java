@@ -1,5 +1,6 @@
-package org.abondar.industrial.heromanager.redis;
+package org.abondar.industrial.heromanager.config;
 
+import org.abondar.industrial.heromanager.properties.RedisProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

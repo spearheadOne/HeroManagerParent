@@ -1,4 +1,4 @@
-package org.abondar.industrial.heromanager.redis;
+package org.abondar.industrial.heromanager.properties;
 
 import lombok.Getter;
 import lombok.Setter;

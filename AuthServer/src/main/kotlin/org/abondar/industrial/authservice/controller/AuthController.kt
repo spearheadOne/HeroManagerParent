@@ -20,14 +20,14 @@ class AuthController {
             "Token is refresh by /v1/auth/refresh")
     @ApiResponses(
         value = [
-            ApiResponse(responseCode = "200", description = "Service is authenticated "),
+            ApiResponse(responseCode = "200", description = "Service is authenticated"),
             ApiResponse(responseCode = "401", description = "Service unauthenticated")
         ]
     )
     @Post
     @Secured(SecurityRule.IS_AUTHENTICATED)
-    fun jwtLogin(): HttpResponse<String> {
-        return HttpResponse.ok("Service is logged in")
+    fun jwtAuth(): HttpResponse<String> {
+        return HttpResponse.ok("Service is authenticated")
     }
 
 

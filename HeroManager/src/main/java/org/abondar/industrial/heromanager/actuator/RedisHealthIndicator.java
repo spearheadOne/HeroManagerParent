@@ -18,12 +18,12 @@ public class RedisHealthIndicator implements HealthIndicator {
         try {
             var pong = redisTemplate.getConnectionFactory().getConnection().ping();
             if ("PONG".equals(pong)) {
-                return Health.up().withDetail("Redis", "Available").build();
+                return Health.up().build();
             } else {
-                return Health.down().withDetail("Redis", "Unavailable").build();
+                return Health.down().build();
             }
         } catch (Exception e) {
-            return Health.down(e).withDetail("Redis", "Error occured").build();
+            return Health.down(e).build();
         }
     }
 }
