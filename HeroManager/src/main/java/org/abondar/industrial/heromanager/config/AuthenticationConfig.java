@@ -33,7 +33,6 @@ public class AuthenticationConfig {
 //        corsConfiguration.setAllowedOriginPatterns(allowedOrigins);
 
         //TODO: fix failed to load remote config on enabled security
-        //TODO: fix login form on disabled security
 
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
