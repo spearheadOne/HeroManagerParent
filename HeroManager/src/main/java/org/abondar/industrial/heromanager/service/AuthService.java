@@ -3,11 +3,13 @@ package org.abondar.industrial.heromanager.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.abondar.industrial.heromanager.properties.AuthServerProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Service
+@ConditionalOnProperty(name="auth.enabled", havingValue = "true")
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {

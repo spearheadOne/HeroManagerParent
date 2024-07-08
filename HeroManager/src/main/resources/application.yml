@@ -20,6 +20,7 @@ springdoc:
   swagger-ui:
     path: /swagger
     enabled: true
+  show-actuator: true
 
 server:
   error:
@@ -34,6 +35,9 @@ management:
     web:
       exposure:
         include: health, info, env, metrics
+  health:
+    redis:
+      enabled: ${auth.enabled}
 
 redis:
   hostname: localhost
@@ -44,3 +48,6 @@ auth-server:
    host: http://localhost:8081
    auth-url: /v1/auth
    health-url: /health
+
+auth:
+  enabled: true

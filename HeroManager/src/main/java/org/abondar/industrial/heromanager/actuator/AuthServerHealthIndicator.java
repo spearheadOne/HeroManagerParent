@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.abondar.industrial.heromanager.service.AuthService;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 @Component
+@ConditionalOnProperty(name="auth.enabled", havingValue = "true")
 @RequiredArgsConstructor
 public class AuthServerHealthIndicator implements HealthIndicator {
 
@@ -15,7 +17,7 @@ public class AuthServerHealthIndicator implements HealthIndicator {
     @Override
     public Health health() {
         try {
-            boolean isUp = Boolean.TRUE.equals(authService.isAuthServerUp().block());
+            var isUp = Boolean.TRUE.equals(authService.isAuthServerUp().block());
             if (isUp) {
                 return Health.up().build();
             } else {

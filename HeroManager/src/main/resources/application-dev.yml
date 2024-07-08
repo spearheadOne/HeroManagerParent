@@ -9,3 +9,6 @@ h2:
   console:
     enabled: true
     path: /h2
+
+auth:
+  enabled: false
