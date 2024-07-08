@@ -23,9 +23,9 @@ public class DatabasebHealthIndicator implements HealthIndicator {
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
             statement.execute(VALIDATION_QUERY);
-            return Health.up().withDetail("Database", "Available").build();
+            return Health.up().build();
         } catch (SQLException e) {
-            return Health.down(e).withDetail("Database", "Not Available: " + e.getMessage()).build();
+            return Health.down(e).build();
         }
     }
 

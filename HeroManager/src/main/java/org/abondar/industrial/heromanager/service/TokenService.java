@@ -15,7 +15,7 @@ public class TokenService {
     private static final Integer TOKEN_EXPIRATION = 600;
     private static final String REDIS_KEY = "authToken:";
 
-    private RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     public void saveToken(String token) {
         redisTemplate.opsForValue().set(REDIS_KEY + token, token, TOKEN_EXPIRATION, TimeUnit.SECONDS);

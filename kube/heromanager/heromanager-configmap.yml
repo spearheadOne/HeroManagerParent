@@ -5,5 +5,6 @@ metadata:
   namespace: herospace
 data:
     DB_HOST: herodb 
-    #TODO: add authserver after integation
+    DB_PORT: "3306"
+    #TODO: add authserver  and redis after integation
    
