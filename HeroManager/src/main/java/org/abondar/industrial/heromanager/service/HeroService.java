@@ -98,7 +98,6 @@ public class HeroService  {
         return heroResponseMapper.mapHero(hero, existingPropertiesMap);
     }
 
-    @Override
     public HeroResponse getHeroByAlias(String alias) {
         var found = heroRepository.findByAlias(alias)
                 .orElseThrow(HeroNotFoundException::new);
@@ -113,7 +112,6 @@ public class HeroService  {
         return heroResponseMapper.mapHero(found, propertiesMap);
     }
 
-    @Override
     public HeroResponse getHeroByName(String name) {
         var found = heroRepository.findByName(name)
                 .orElseThrow(HeroNotFoundException::new);
@@ -128,7 +126,6 @@ public class HeroService  {
         return heroResponseMapper.mapHero(found, propertiesMap);
     }
 
-    @Override
     public List<HeroResponse> getAllHeroes(int offset, int limit) {
 
         var pageRequest = PageRequest.of(offset, limit);
@@ -144,7 +141,6 @@ public class HeroService  {
         return mapHeroes(heroes);
     }
 
-    @Override
     public void deleteHero(long heroId) {
         checkHero(heroId);
 
@@ -153,7 +149,6 @@ public class HeroService  {
         log.info("Deleted hero: {}", heroId);
     }
 
-    @Override
     public void deleteHeroProperty(long heroId, String propertyValue) {
         checkHero(heroId);
 
@@ -165,7 +160,6 @@ public class HeroService  {
         log.info("Deleted property {} for hero: {}", propertyValue,heroId);
     }
 
-    @Override
     public List<HeroResponse> getHeroByProperty(String propertyValue, String propertyType, int offset, int limit){
         var pageRequest = PageRequest.of(offset, limit);
 
