@@ -19,7 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +36,7 @@ public class HeroServiceTest {
     private HeroPropertyRepository heroPropertyRepo;
 
     @InjectMocks
-    private HeroServiceImpl heroService;
+    private HeroService heroService;
 
     @Spy
     private HeroPropertyMapper propertyMapper = new HeroPropertyMapper();
