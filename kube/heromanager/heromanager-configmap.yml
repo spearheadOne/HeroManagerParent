@@ -6,5 +6,8 @@ metadata:
 data:
     DB_HOST: herodb 
     DB_PORT: "3306"
-    #TODO: add authserver  and redis after integation
-   
+    REDIS_HOST: redis
+    REDIS_PORT: "6379"
+    REDIS_PASSWORD: ""
+    AUTH_SRV_HOST: http://authserver
+    AUTH_SRV_PORT: "8081"
