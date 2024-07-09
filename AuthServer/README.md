@@ -42,3 +42,9 @@ Set image name and docker registry credentials in gradle.properties. Make sure t
 `docker run --env-file ./dev.env -d --name todo  -p 8080:8080 abondar/authserver:1.0
 ```
 Note: update dev.env file with your mysql host and credentials
+
+## Application profiles
+
+- dev: dev h2 db
+- mysql: profile with local mysql db
+- docker: docker profile to be used in cloud

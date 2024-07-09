@@ -10,7 +10,9 @@ spring:
   cache:
     cache-names: heroPropertiesCache, heroesCache
     caffeine:
-      spec: maximumSize=500,expireAfterWrite=10m
+      spec: maximumSize=500,expireAfterWrite=1m
+
+
 
 
 springdoc:

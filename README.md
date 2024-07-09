@@ -1,11 +1,14 @@
 # HeroManager Parent
 
-Parent repository for [HeroManager](HeroManager/README.md) application and related to it Authentication service
+Parent repository for [HeroManager](HeroManager/README.md) application and related to it [Authentication service](AuthServer/README.md)
 
 ## Build and run
 
-Run entire solution in docker compose 
+- For local run check readme files of both services
 
+
+- For kube run
 ```
-docker-compose up
+cd kube
+kubectl apply -f <resource-folder> -n herospace
 ```
