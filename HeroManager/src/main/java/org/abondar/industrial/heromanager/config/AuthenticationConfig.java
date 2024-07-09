@@ -32,13 +32,12 @@ public class AuthenticationConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(hs -> hs.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth-> auth.requestMatchers("/swagger/**","/swagger-ui/**", "/v3/api-docs/**",  "/docs/**", "/actuator/health")
+                .authorizeHttpRequests(auth-> auth.requestMatchers("/swagger/**","/swagger-ui/**", "/v3/api-docs/**",
+                                "/docs/**", "/actuator/health","/error")
                         .permitAll()
-                        .requestMatchers("/v1/hero/alias/**")
+                        .requestMatchers("/v1/hero/**")
                         .authenticated()
-                        .requestMatchers("/v1/hero/name/**")
-                        .authenticated()
-                        .requestMatchers("/v1/hero/prop/**")
+                        .requestMatchers("/v1/hero/name/**", "/v1/hero/alias/**", "/v1/hero/value/**")
                         .authenticated()
                         .anyRequest()
                         .authenticated()
