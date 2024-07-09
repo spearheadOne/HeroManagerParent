@@ -38,8 +38,6 @@ public class AuthenticationConfig {
                         .authenticated()
                         .requestMatchers("/v1/hero/name/**")
                         .authenticated()
-                        .requestMatchers("/v1/hero/value/**/type/**")
-                        .authenticated()
                         .requestMatchers("/v1/hero/prop/**")
                         .authenticated()
                         .anyRequest()

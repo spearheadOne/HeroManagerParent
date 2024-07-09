@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Tag("integration")
-public class HeroManagaerITest {
+public class HeroManagerITest {
 
     @Container
     private static final MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:8.4.0")
