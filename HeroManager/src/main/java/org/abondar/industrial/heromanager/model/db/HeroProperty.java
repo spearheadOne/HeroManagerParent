@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "hero_property")
 @Data
-public class HeroProperty {
+public class HeroProperty implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

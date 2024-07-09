@@ -20,12 +20,12 @@ springdoc:
   swagger-ui:
     path: /swagger
     enabled: true
-  show-actuator: true
 
 server:
   error:
     include-message: always
   address: 0.0.0.0
+  forward-headers-strategy: framework
 
 management:
   endpoint:

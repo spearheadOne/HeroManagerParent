@@ -6,18 +6,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.abondar.industrial.heromanager.authentication.JwtAuthenticationToken;
 import org.abondar.industrial.heromanager.service.AuthService;
 import org.abondar.industrial.heromanager.service.TokenService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.List;
 
 @Component
 @ConditionalOnProperty(name="auth.enabled", havingValue = "true")
@@ -37,7 +35,6 @@ public class AuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
 
         var authHeader = request.getHeader(AUTH_HEADER);
         if (authHeader != null && authHeader.startsWith(BEARER_PREFIX)) {
@@ -59,7 +56,8 @@ public class AuthFilter extends OncePerRequestFilter {
     }
 
     private void authenticate(String token){
-        Authentication authentication = new UsernamePasswordAuthenticationToken(token, null);
+        Authentication authentication = new JwtAuthenticationToken(token);
+        authentication.setAuthenticated(true);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

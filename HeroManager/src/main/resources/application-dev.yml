@@ -11,4 +11,13 @@ h2:
     path: /h2
 
 auth:
-  enabled: false
+  enabled: true
+
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+        web:
+          cors: DEBUG
