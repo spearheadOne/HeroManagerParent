@@ -86,7 +86,7 @@ public class HeroServiceTest {
 
         var response = heroService.updateHero(1L, request);
 
-        verify(heroRepo, times(1)).updateHero(1L,response.name(),request.alias(),request.origin());
+        verify(heroRepo, times(1)).updateHero(1L,request.alias(),response.name(),request.origin());
         verify(heroPropertyRepo, times(1)).saveAll(anyList());
 
         assertNotNull(response);

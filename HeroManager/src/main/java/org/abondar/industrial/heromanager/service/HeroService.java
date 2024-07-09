@@ -63,7 +63,7 @@ public class HeroService  {
         Optional.ofNullable(request.alias()).ifPresent(hero::setAlias);
         Optional.ofNullable(request.origin()).ifPresent(hero::setOrigin);
 
-        heroRepository.updateHero(heroId,request.name(), request.alias(), request.origin());
+        heroRepository.updateHero(heroId,request.alias(),request.name(), request.origin());
         log.info("Updated hero: {}", hero.getId());
 
         var existingProperties = heroPropertyRepository.findByHeroId(heroId);
