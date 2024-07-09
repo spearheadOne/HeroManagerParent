@@ -12,3 +12,7 @@ Parent repository for [HeroManager](HeroManager/README.md) application and relat
 cd kube
 kubectl apply -f <resource-folder> -n herospace
 ```
+## Access
+
+- Auth server: localhost/ 
+- Hero manager: localhost/heromanager

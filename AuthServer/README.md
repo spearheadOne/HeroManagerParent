@@ -48,3 +48,28 @@ Note: update dev.env file with your mysql host and credentials
 - dev: dev h2 db
 - mysql: profile with local mysql db
 - docker: docker profile to be used in cloud
+
+## Default endpoints
+- Login
+```
+ POST /v1/user/login 
+ 
+HEADER: Content-Type: x-www-urlformencoded
+
+Form: {
+username: "test",
+password: "test"
+}
+```
+
+- Reshresh JWT token
+```
+POST /v1/auth/refresh
+
+HEADER: Content-Type: x-www-urlformencoded
+
+Form: {
+grant_type: "refresh_token",
+refresh_token: "token"
+}
+```
