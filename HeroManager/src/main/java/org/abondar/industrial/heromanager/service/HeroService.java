@@ -186,10 +186,18 @@ public class HeroService  {
                 .toList();
 
         var properties = propertyRepository.findByHeroIds(heroIds);
-        var propertiesMap = propertyMapper.unmapProperties(properties);
 
-        return heroes.stream().map(
-                        hero -> heroResponseMapper.mapHero(hero, propertiesMap))
+
+        return heroes.stream()
+                .map(hero -> {
+                    var heroProperties = properties.stream()
+                            .filter(prop -> prop.getHero().getId()==hero.getId())
+                            .toList();
+
+
+                    var propertiesMap = propertyMapper.unmapProperties(heroProperties);
+                    return heroResponseMapper.mapHero(hero, propertiesMap);
+                })
                 .collect(Collectors.toList());
     }
 }

@@ -176,6 +176,7 @@ public class HeroServiceTest {
         var hp1 = new HeroProperty();
         hp1.setPropertyType(PropertyType.ASSOCIATION);
         hp1.setPropertyValue("as1");
+        hp1.setHero(hero);
 
         when(heroRepo.findAll(PageRequest.of(0,2)))
                 .thenReturn(new PageImpl<>(List.of(hero)));
